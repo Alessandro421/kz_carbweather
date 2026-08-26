@@ -23,14 +23,16 @@ const app = (await Promise.all([
   'app-telemetry.js',
   'race-ui.js',
   'cloud.js',
-  'app-enhancements.js'
+  'app-enhancements.js',
+  'branding.js'
 ].map(read))).join('\n\n');
 
 const css = (await Promise.all([
   'styles.css',
   'race.css',
   'cloud.css',
-  'layout-fixes.css'
+  'layout-fixes.css',
+  'branding.css'
 ].map(read))).join('\n\n');
 
 const html = template
@@ -44,4 +46,4 @@ await Promise.all([
   copyFile('sw.js', 'dist/sw.js')
 ]);
 
-console.log('KZ CarbWeather build: single HTML runtime generated; track DB, cloud sync and auth redirect handling included.');
+console.log('KZ CarbWeather build: single HTML runtime generated; track DB, cloud sync, compact branding and auth redirect handling included.');
