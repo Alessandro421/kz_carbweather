@@ -4,7 +4,14 @@
     <div class="logo">CW</div>
     <div><h1>KZ CarbWeather</h1><div class="sub">Dell'Orto VHSH 30 CS · KZ 125 · meteo + carburazione + track log</div></div>
   </div>
-  <div class="badge">Dati salvati solo nel browser</div>
+  <div class="headerDataTools">
+    <div class="badge">Dati locali · Cloud se connesso</div>
+    <div class="headerDataActions">
+      <button class="btn2 compactBtn" type="button" onclick="exportAllData()">Esporta tutto</button>
+      <button class="btn2 compactBtn" type="button" onclick="triggerImportAll()">Importa</button>
+      <input id="backupImportFile" type="file" accept="application/json,.json" hidden onchange="importAllDataFile(this.files[0])">
+    </div>
+  </div>
 </header>
 
 <div class="grid">
@@ -13,28 +20,49 @@
   <div class="kicker">TRACK MODE</div>
   <div class="trackTitle" id="mTrack">Pista non selezionata</div>
   <div class="weatherLine" id="mWeather">Carica il meteo per iniziare</div>
+
   <div class="suggestGrid">
-    <div class="suggestMain"><div class="k">GETTO MAX</div><div class="n" id="mMain">—</div></div>
-    <div class="mini"><div class="k">POLVERIZZATORE</div><div class="n" id="mAtom">—</div></div>
-    <div class="mini"><div class="k">SPILLO / TACCA</div><div class="n" id="mNeedle">—</div></div>
+    <div class="suggestMain">
+      <div class="k">GETTO MAX</div>
+      <div class="n" id="mMain">—</div>
+    </div>
+    <div class="mini">
+      <div class="k">POLVERIZZATORE</div>
+      <div class="n" id="mAtom">—</div>
+    </div>
+    <div class="mini">
+      <div class="k">SPILLO / TACCA</div>
+      <div class="n" id="mNeedle">—</div>
+    </div>
   </div>
+
   <div class="egtStrip">
-    <div class="egtBox"><div class="k">ULTIMA EGT MIN REALE</div><div class="n"><span id="mEgtMin">—</span>°</div></div>
-    <div class="egtBox"><div class="k">ULTIMA EGT MAX</div><div class="n"><span id="mEgtMax">—</span>°</div></div>
+    <div class="egtBox">
+      <div class="k">ULTIMA EGT MIN REALE</div>
+      <div class="n"><span id="mEgtMin">—</span>°</div>
+    </div>
+    <div class="egtBox">
+      <div class="k">ULTIMA EGT MAX</div>
+      <div class="n"><span id="mEgtMax">—</span>°</div>
+    </div>
   </div>
+
   <div class="mobileActions">
     <button class="btn" onclick="document.getElementById('place').scrollIntoView({behavior:'smooth'})">Meteo</button>
     <button class="btn2" onclick="document.getElementById('telemetryFile').scrollIntoView({behavior:'smooth'})">ALFANO</button>
   </div>
+
   <div class="installHint">Su iPhone/Android puoi aggiungere questa pagina alla schermata Home per usarla come una quasi-app.</div>
 </section>
 
 <section class="card span12">
-  <div class="kicker">01 · Meteo live</div><h2>Condizioni attuali</h2>
+  <div class="kicker">01 · Meteo live</div>
+  <h2>Condizioni attuali</h2>
   <div class="row">
     <div class="f8"><label>Località / pista</label><input id="place" placeholder="Es. Lonato, Castelletto di Branduzzo, Siena..."></div>
     <div class="f4" style="align-self:end"><div class="actions" style="margin:0"><button class="btn" onclick="searchPlace()">Cerca meteo</button><button class="btn2" onclick="geoWeather()">GPS</button></div></div>
   </div>
+  <div id="placeResults" class="placeResults" hidden></div>
   <div id="weatherMsg" class="note">Inserisci una località oppure usa il GPS.</div>
   <div class="metrics">
     <div class="metric"><div class="k">Temperatura</div><div class="v"><span id="wTemp">—</span>°C</div></div>
@@ -46,37 +74,47 @@
 </section>
 
 <section class="card span6">
-  <div class="kicker">02 · Baseline</div><h2>Setup di riferimento “buono”</h2>
+  <div class="kicker">02 · Baseline</div>
+  <h2>Setup di riferimento “buono”</h2>
   <div class="row">
-    <div class="f4"><label>Temperatura °C</label><input id="bTemp" type="number" step=".1" value="20"></div>
-    <div class="f4"><label>Pressione hPa</label><input id="bPress" type="number" step=".1" value="1013"></div>
-    <div class="f4"><label>Umidità %</label><input id="bRh" type="number" step="1" value="50"></div>
+    <div class="f4"><label>Temperatura °C</label><input id="bTemp" type="number" step=".1" value="20" inputmode="decimal"></div>
+    <div class="f4"><label>Pressione hPa</label><input id="bPress" type="number" step=".1" value="1013" inputmode="decimal"></div>
+    <div class="f4"><label>Umidità %</label><input id="bRh" type="number" step="1" value="50" inputmode="decimal"></div>
   </div>
   <h3>Carburatore baseline</h3>
   <div class="row">
     <div class="f4"><label>Getto max</label><select id="bMain"></select></div>
     <div class="f4"><label>Spillo</label><select id="bNeedle"></select></div>
-    <div class="f4"><label id="bClipLabel">Tacca · step 0,5</label><input id="bClip" type="number" min="1" max="5" step="0.5" value="3"></div>
+    <div class="f4"><label id="bClipLabel">Tacca · step 0,5</label><input id="bClip" type="number" min="1" max="5" step="0.5" value="3" inputmode="decimal"></div>
     <div class="f4"><label>Polverizzatore</label><select id="bAtom"></select></div>
     <div class="f4"><label>Getto minimo 12995</label><select id="bIdle"></select></div>
     <div class="f4"><label>Emulsionatore minimo B 13086</label><select id="bIdleB"></select></div>
-    <div class="f4"><label>Vite aria (giri)</label><input id="bAir" type="number" step=".25" value="1.5"></div>
+    <div class="f4"><label>Vite aria (giri)</label><input id="bAir" type="number" step=".25" value="1.5" inputmode="decimal"></div>
     <div class="f4"><label>Valvola gas</label><select id="bSlide"></select></div>
   </div>
-  <details><summary>Geometria spillo selezionato</summary>
+  <details>
+    <summary>Geometria spillo selezionato</summary>
     <div class="row" style="margin-top:10px">
-      <div class="f4"><label>Ø tratto cilindrico A (mm)</label><input id="bA" type="number" step=".01" value="2.52" readonly></div>
-      <div class="f4"><label>Ø punta B (mm)</label><input id="bB" type="number" step=".01" value="1.80" readonly></div>
-      <div class="f4"><label>Lunghezza cono C (mm)</label><input id="bC" type="number" step=".1" value="41" readonly></div>
+      <div class="f4"><label>Ø tratto cilindrico A (mm)</label><input id="bA" type="number" step=".01" value="2.52" readonly inputmode="decimal"></div>
+      <div class="f4"><label>Ø punta B (mm)</label><input id="bB" type="number" step=".01" value="1.80" readonly inputmode="decimal"></div>
+      <div class="f4"><label>Lunghezza cono C (mm)</label><input id="bC" type="number" step=".1" value="41" readonly inputmode="decimal"></div>
     </div>
-    <div class="note" id="bNeedleInfo">Le quote A/B/C vengono caricate automaticamente dal database tecnico.</div>
+    <div class="note" id="bNeedleInfo">Le quote A/B/C vengono caricate automaticamente dal database tecnico. Le varianti senza quote verificate restano selezionabili ma vengono marcate “geometria n/d”.</div>
   </details>
   <div class="actions"><button class="btn" onclick="saveBaseline()">Salva baseline</button><button class="btn2" onclick="setBaselineFromWeather()">Usa meteo attuale come baseline</button></div>
 </section>
 
 <section class="card span6">
-  <div class="kicker">03 · Correzione meteo</div><h2>Quanto cambia l’aria rispetto alla baseline?</h2>
-  <div class="heroResult"><div><div class="caption">Variazione densità aria</div><div class="big" id="densityDelta">—</div><div class="caption" id="densityText">Carica il meteo per calcolare</div></div><span id="densityStatus" class="status neutral">—</span></div>
+  <div class="kicker">03 · Correzione meteo</div>
+  <h2>Quanto cambia l’aria rispetto alla baseline?</h2>
+  <div class="heroResult">
+    <div>
+      <div class="caption">Variazione densità aria</div>
+      <div class="big" id="densityDelta">—</div>
+      <div class="caption" id="densityText">Carica il meteo per calcolare</div>
+    </div>
+    <span id="densityStatus" class="status neutral">—</span>
+  </div>
   <div class="sep"></div>
   <div class="row">
     <div class="f6"><label>Getto max baseline</label><div class="metric"><div class="v" id="mainBaseView">180</div></div></div>
