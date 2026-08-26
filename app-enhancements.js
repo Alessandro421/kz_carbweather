@@ -1,4 +1,5 @@
-/* Track-aware place search + Supabase confirmation redirect fix. No carburation/EGT formulas here. */
+/* Track-aware place search + GPS reverse geocoding + Supabase confirmation redirect fix.
+   No carburation, density or EGT formulas are changed here. */
 (function(){
   const norm=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
   const hasCoords=t=>Number.isFinite(t?.latitude)&&Number.isFinite(t?.longitude);
@@ -10,6 +11,39 @@
     kind:'track',name:t.name,admin1:`${t.city} · ${t.region}`,country:'ACI SPORT',
     latitude:t.latitude,longitude:t.longitude,label:`${t.name}, ${t.city}`,track:t
   });
+
+  const distanceKm=(lat1,lon1,lat2,lon2)=>{
+    const R=6371,toRad=x=>x*Math.PI/180;
+    const dLat=toRad(lat2-lat1),dLon=toRad(lon2-lon1);
+    const a=Math.sin(dLat/2)**2+Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;
+    return 2*R*Math.asin(Math.sqrt(a));
+  };
+
+  function nearestKnownTrack(lat,lon,maxKm=4){
+    if(!Array.isArray(TRACK_DATABASE))return null;
+    let best=null;
+    TRACK_DATABASE.filter(hasCoords).forEach(t=>{
+      const km=distanceKm(lat,lon,t.latitude,t.longitude);
+      if(km<=maxKm&&(!best||km<best.km))best={track:t,km};
+    });
+    return best;
+  }
+
+  async function reverseGpsLabel(lat,lon){
+    const near=nearestKnownTrack(lat,lon);
+    if(near)return `${near.track.name}, ${near.track.city}`;
+    try{
+      const r=await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}&zoom=12&addressdetails=1&accept-language=it`);
+      if(!r.ok)throw Error('Reverse geocoding non disponibile');
+      const j=await r.json(),a=j.address||{};
+      const locality=a.city||a.town||a.village||a.municipality||a.hamlet||a.suburb||a.county||j.name;
+      const region=a.state||a.region;
+      const parts=[locality,region].filter(Boolean).filter((x,i,arr)=>arr.indexOf(x)===i);
+      return parts.length?parts.join(', '):'Posizione GPS';
+    }catch{
+      return 'Posizione GPS';
+    }
+  }
 
   async function geocodeTrackLocality(t){
     const expanded=String(t.city||'').replace(/^S\.\s*/i,'San ');
@@ -84,6 +118,20 @@
       if(tracks.length){renderPlaceResults(tracks.map(asPlace));setInlineMessage('weatherMsg','Seleziona la pista corretta tra i risultati.');return}
       clearPlaceResults();setInlineMessage('weatherMsg','Errore: '+e.message,true);
     }
+  };
+
+  /* GPS: use coordinates for weather, but resolve a human-readable locality for the UI. */
+  window.geoWeather=function(){
+    clearPlaceResults();
+    if(!navigator.geolocation){setInlineMessage('weatherMsg','GPS non disponibile.',true);return}
+    setInlineMessage('weatherMsg','Lettura posizione GPS…');
+    navigator.geolocation.getCurrentPosition(async p=>{
+      const lat=p.coords.latitude,lon=p.coords.longitude;
+      setInlineMessage('weatherMsg','Posizione rilevata. Identifico la località…');
+      const label=await reverseGpsLabel(lat,lon);
+      if($('place'))$('place').value=label;
+      await loadWeather(lat,lon,label);
+    },()=>setInlineMessage('weatherMsg','GPS non disponibile/consentito.',true),{enableHighAccuracy:true,timeout:12000,maximumAge:60000});
   };
 
   /* Hosted client uses implicit auth flow. Force signup confirmation back to the production app. */
