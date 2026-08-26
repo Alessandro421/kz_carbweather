@@ -2,13 +2,32 @@
   <div class="kicker">07 · Telemetria scarico</div>
   <h2>Importa sessione e analizza EGT</h2>
   <div class="row">
-    <div class="f3"><label>Sessione ALFANO 7 ZIP oppure CSV/TXT</label><input id="telemetryFile" type="file" accept=".zip,.csv,.txt,application/zip,text/csv,text/plain"></div>
-    <div class="f3"><label>Target minimo EGT °C</label><input id="egtLow" type="number" value="400"></div>
-    <div class="f3"><label>Target massimo EGT °C</label><input id="egtHigh" type="number" value="630"></div>
-    <div class="f3"><label>Soglia EGT MIN reale °C</label><input id="egtValidMin" type="number" value="350"></div>
+    <div class="f3">
+      <label>Sessione ALFANO 7 ZIP oppure CSV/TXT</label>
+      <input id="telemetryFile" type="file" accept=".zip,.csv,.txt,application/zip,text/csv,text/plain">
+    </div>
+    <div class="f3">
+      <label>Target minimo EGT °C</label>
+      <input id="egtLow" type="number" value="400" inputmode="decimal">
+    </div>
+    <div class="f3">
+      <label>Target massimo EGT °C</label>
+      <input id="egtHigh" type="number" value="630" inputmode="decimal">
+    </div>
+    <div class="f3">
+      <label>Soglia EGT MIN reale °C</label>
+      <input id="egtValidMin" type="number" value="350" inputmode="decimal">
+    </div>
   </div>
-  <div class="actions"><button class="btn" onclick="importTelemetry()">Analizza sessione</button><button class="btn2" onclick="clearTelemetry()">Reset</button></div>
-  <div id="telemetryMsg" class="note">Puoi caricare direttamente lo ZIP originale ALFANO 7. Per il formato ALFANO KZ: T1 viene letto come acqua e T2 come EGT/scarico.</div>
+  <div class="actions">
+    <button class="btn" onclick="importTelemetry()">Analizza sessione</button>
+    <button class="btn2" onclick="clearTelemetry()">Reset</button>
+  </div>
+
+  <div id="telemetryMsg" class="note">
+    Puoi caricare direttamente lo ZIP originale ALFANO 7. Per il formato ALFANO KZ: T1 viene letto come acqua e T2 come EGT/scarico.
+  </div>
+
   <div class="metrics" style="margin-top:14px">
     <div class="metric"><div class="k">EGT MIN grezza</div><div class="v"><span id="egtMin">—</span>°C</div></div>
     <div class="metric"><div class="k">EGT MIN reale</div><div class="v"><span id="egtMinValid">—</span>°C</div><div class="k">≥ soglia</div></div>
@@ -16,33 +35,74 @@
     <div class="metric"><div class="k">Campioni nel target</div><div class="v"><span id="egtInRange">—</span>%</div></div>
     <div class="metric"><div class="k">Picco RPM associato</div><div class="v"><span id="egtPeakRpm">—</span></div></div>
   </div>
+
   <div class="row" style="margin-top:12px">
-    <div class="f6"><div class="metric"><div class="k">Sotto target</div><div class="v"><span id="egtBelow">—</span>%</div><div class="k">campioni sotto <span id="egtLowLabel">400</span> °C</div></div></div>
-    <div class="f6"><div class="metric"><div class="k">Sopra target</div><div class="v"><span id="egtAbove">—</span>%</div><div class="k">campioni sopra <span id="egtHighLabel">630</span> °C</div></div></div>
+    <div class="f6">
+      <div class="metric">
+        <div class="k">Sotto target</div>
+        <div class="v"><span id="egtBelow">—</span>%</div>
+        <div class="k">campioni sotto <span id="egtLowLabel">400</span> °C</div>
+      </div>
+    </div>
+    <div class="f6">
+      <div class="metric">
+        <div class="k">Sopra target</div>
+        <div class="v"><span id="egtAbove">—</span>%</div>
+        <div class="k">campioni sopra <span id="egtHighLabel">630</span> °C</div>
+      </div>
+    </div>
   </div>
-  <div id="egtAssessment" class="alert" style="margin-top:12px">Importa una sessione per valutare la finestra 400–630 °C.</div>
+
+  <div id="egtAssessment" class="alert" style="margin-top:12px">
+    Importa una sessione per valutare la finestra 400–630 °C.
+  </div>
+
   <div id="alfanoSessionBlock" style="display:none;margin-top:14px">
-    <div class="sep"></div><h3>Analisi giro per giro</h3><div id="alfanoBestLap" class="alert" style="margin-bottom:10px"></div>
-    <div style="overflow:auto"><table id="alfanoLapTable"><thead><tr><th>Giro</th><th>Tempo</th><th>EGT MIN grezza</th><th>EGT MIN reale</th><th>EGT MAX</th><th>&gt;630</th><th>H₂O min</th><th>H₂O max</th><th>RPM max</th><th>Vel. max</th></tr></thead><tbody></tbody></table></div>
+    <div class="sep"></div>
+    <h3>Analisi giro per giro</h3>
+    <div id="alfanoBestLap" class="alert" style="margin-bottom:10px"></div>
+    <div style="overflow:auto">
+      <table id="alfanoLapTable">
+        <thead>
+          <tr>
+            <th>Giro</th><th>Tempo</th><th>EGT MIN grezza</th><th>EGT MIN reale</th><th>EGT MAX</th>
+            <th>&gt;630</th><th>H₂O min</th><th>H₂O max</th><th>RPM max</th><th>Vel. max</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
     <div id="alfanoLapCards" class="lapCards"></div>
   </div>
-  <details><summary>Dettaglio canali rilevati</summary><div id="detectedChannels" class="note" style="margin-top:8px">—</div></details>
-  <div class="note">Il range 400–630 °C viene usato come riferimento operativo dell'app. La EGT MIN reale ignora i campioni sotto la soglia configurata (default 350 °C). La lettura va interpretata insieme a regime motore, posizione gas, durata del pieno carico e posizione della sonda EGT.</div>
+
+  <details>
+    <summary>Dettaglio canali rilevati</summary>
+    <div id="detectedChannels" class="note" style="margin-top:8px">—</div>
+  </details>
+
+  <div class="note">
+    Il range 400–630 °C viene usato come riferimento operativo dell'app. La EGT MIN reale ignora i campioni sotto la soglia configurata (default 350 °C). La lettura va interpretata insieme a regime motore,
+    posizione gas, durata del pieno carico e posizione della sonda EGT.
+  </div>
 </section>
 
 <section class="card span12">
-  <div class="kicker">08 · Track log</div><h2>Salva prove e sensazioni</h2>
+  <div class="kicker">08 · Track log</div>
+  <h2>Salva prove e sensazioni</h2>
   <div class="row">
     <div class="f3"><label>Data</label><input id="logDate" type="date"></div>
     <div class="f3"><label>Pista / località</label><input id="logPlace"></div>
-    <div class="f2"><label>EGT max °C</label><input id="logEgt" type="number"></div>
-    <div class="f2"><label>Acqua max °C</label><input id="logWater" type="number"></div>
-    <div class="f2"><label>Valutazione 1–5</label><input id="logScore" type="number" min="1" max="5"></div>
+    <div class="f2"><label>EGT max °C</label><input id="logEgt" type="number" inputmode="decimal"></div>
+    <div class="f2"><label>Acqua max °C</label><input id="logWater" type="number" inputmode="decimal"></div>
+    <div class="f2"><label>Valutazione 1–5</label><input id="logScore" type="number" min="1" max="5" inputmode="decimal"></div>
     <div class="f12"><label>Note (ripresa, borbotta, vuoto, allungo, colore candela...)</label><textarea id="logNotes" rows="2"></textarea></div>
   </div>
   <div class="actions"><button class="btn" onclick="addLog()">Salva prova</button><button class="btn2" onclick="exportCSV()">Esporta CSV</button><button class="btnDanger" onclick="clearLogs()">Cancella log</button></div>
-  <div style="overflow:auto;margin-top:12px"><table id="logTable"><thead><tr><th>Data</th><th>Luogo</th><th>Meteo</th><th>Setup</th><th>EGT</th><th>H₂O</th><th>Score</th><th>Note</th></tr></thead><tbody></tbody></table></div>
+  <div style="overflow:auto;margin-top:12px">
+    <table id="logTable"><thead><tr><th>Data</th><th>Luogo</th><th>Meteo</th><th>Setup</th><th>EGT</th><th>H₂O</th><th>Score</th><th>Note</th></tr></thead><tbody></tbody></table>
+  </div>
 </section>
 </div>
-<footer>KZ CarbWeather v1.4 · Strumento di supporto alla messa a punto VHSH 30 KZ. Carburazione suggerita da meteo + ALFANO 7 · EGT MIN reale filtrata (default ≥350 °C) · target max 630 °C.</footer>
+
+<footer>KZ CarbWeather v1.6 · Strumento di supporto alla messa a punto VHSH 30 KZ. Carburazione suggerita da meteo + ALFANO 7 · EGT MIN reale filtrata (default ≥350 °C) · target max 630 °C.</footer>
 </div>
