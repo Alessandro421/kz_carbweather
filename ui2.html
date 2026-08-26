@@ -4,22 +4,24 @@
   <div class="row">
     <div class="f4"><label>Getto max test</label><select id="tMain"></select></div>
     <div class="f4"><label>Spillo test</label><select id="tNeedle"></select></div>
-    <div class="f4"><label id="tClipLabel">Tacca test · step 0,5</label><input id="tClip" type="number" min="1" max="5" step="0.5" value="3"></div>
+    <div class="f4"><label id="tClipLabel">Tacca test · step 0,5</label><input id="tClip" type="number" min="1" max="5" step="0.5" value="3" inputmode="decimal"></div>
     <div class="f4"><label>Polverizzatore test</label><select id="tAtom"></select></div>
     <div class="f4"><label>Getto minimo 12995 test</label><select id="tIdle"></select></div>
     <div class="f4"><label>Emulsionatore minimo B test</label><select id="tIdleB"></select></div>
-    <div class="f4"><label>Vite aria test</label><input id="tAir" type="number" step=".25" value="1.5"></div>
+    <div class="f4"><label>Vite aria test</label><input id="tAir" type="number" step=".25" value="1.5" inputmode="decimal"></div>
     <div class="f4"><label>Valvola gas test</label><select id="tSlide"></select></div>
   </div>
-  <details><summary>Geometria spillo test</summary>
+  <details>
+    <summary>Geometria spillo test</summary>
     <div class="row" style="margin-top:10px">
-      <div class="f4"><label>Ø A (mm)</label><input id="tA" type="number" step=".01" placeholder="n/d" readonly></div>
-      <div class="f4"><label>Ø B (mm)</label><input id="tB" type="number" step=".01" placeholder="n/d" readonly></div>
-      <div class="f4"><label>C (mm)</label><input id="tC" type="number" step=".1" placeholder="n/d" readonly></div>
+      <div class="f4"><label>Ø A (mm)</label><input id="tA" type="number" step=".01" placeholder="n/d" readonly inputmode="decimal"></div>
+      <div class="f4"><label>Ø B (mm)</label><input id="tB" type="number" step=".01" placeholder="n/d" readonly inputmode="decimal"></div>
+      <div class="f4"><label>C (mm)</label><input id="tC" type="number" step=".1" placeholder="n/d" readonly inputmode="decimal"></div>
     </div>
   </details><div class="note" id="tNeedleInfo"></div>
   <div class="actions"><button class="btn" onclick="compareSetup()">Confronta setup</button><button class="btn2" onclick="copyBaselineToTest()">Copia baseline</button></div>
   <div id="atomizerComparison" class="alert" style="margin-top:10px">Confronto polverizzatore: —</div>
+
   <h3>Effetto stimato per apertura gas</h3>
   <div id="zones">
     <div class="zone"><span>0–1/8</span><div class="bar"><i style="width:0"></i></div><span class="zoneVal">—</span></div>
@@ -48,7 +50,11 @@
 <section class="card span12">
   <div class="kicker">06 · Carburazione suggerita</div>
   <h2>Setup VHSH 30 consigliato per il meteo attuale</h2><div class="badge" style="display:inline-block;margin-bottom:10px">Profilo: KZ Race</div>
-  <div id="suggestedWeather" class="alert">Carica il meteo della pista per generare la carburazione suggerita partendo dalla tua baseline.</div>
+
+  <div id="suggestedWeather" class="alert">
+    Carica il meteo della pista per generare la carburazione suggerita partendo dalla tua baseline.
+  </div>
+
   <div class="metrics" style="margin-top:14px">
     <div class="metric"><div class="k">Getto MAX</div><div class="v" id="sMain">—</div><div class="k" id="sMainDelta">6413</div></div>
     <div class="metric"><div class="k">Spillo</div><div class="v" id="sNeedle">—</div><div class="k">serie K</div></div>
@@ -56,12 +62,23 @@
     <div class="metric"><div class="k">Polverizzatore</div><div class="v" id="sAtom">—</div><div class="k">DP / DQ</div></div>
     <div class="metric"><div class="k">Getto minimo</div><div class="v" id="sIdle">—</div><div class="k">12995</div></div>
   </div>
+
   <div class="metrics" style="margin-top:8px">
     <div class="metric"><div class="k">Emulsionatore minimo</div><div class="v" id="sIdleB">—</div><div class="k">serie B</div></div>
     <div class="metric"><div class="k">Vite aria</div><div class="v" id="sAir">—</div><div class="k">giri</div></div>
     <div class="metric"><div class="k">Valvola gas</div><div class="v" id="sSlide">—</div><div class="k">cutaway</div></div>
   </div>
-  <div id="suggestedReason" class="note" style="margin-top:12px">La raccomandazione viene calcolata rispetto alla carburazione baseline salvata.</div>
-  <div class="actions"><button class="btn" onclick="applySuggestedSetup()">Copia nel setup test</button></div>
-  <div class="note">Strategia KZ Race: il getto massimo viene corretto in modo lineare con la variazione di densità aria. Il polverizzatore reagisce già da circa ±2% di scostamento; tacca e circuito del minimo restano più conservativi. La verifica finale resta EGT + comportamento motore.</div>
+
+  <div id="suggestedReason" class="note" style="margin-top:12px">
+    La raccomandazione viene calcolata rispetto alla carburazione baseline salvata.
+  </div>
+
+  <div class="actions">
+    <button class="btn" onclick="applySuggestedSetup()">Copia nel setup test</button>
+  </div>
+
+  <div class="note">
+    Strategia KZ Race: il getto massimo viene corretto in modo lineare con la variazione di densità aria. Il polverizzatore reagisce già
+    da circa ±2% di scostamento; tacca e circuito del minimo restano più conservativi. La verifica finale resta EGT + comportamento motore.
+  </div>
 </section>
