@@ -1,20 +1,64 @@
 /* Track-aware place search + Supabase confirmation redirect fix. No carburation/EGT formulas here. */
 (function(){
   const norm=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ');
+  const hasCoords=t=>Number.isFinite(t?.latitude)&&Number.isFinite(t?.longitude);
   const trackMatches=q=>{
-    const nq=norm(q); if(nq.length<2||!Array.isArray(window.TRACK_DATABASE||TRACK_DATABASE))return [];
-    return TRACK_DATABASE.filter(t=>[t.name,t.city,t.region,...(t.aliases||[])].some(a=>{const na=norm(a);return na===nq||na.includes(nq)||nq.includes(na)}));
+    const nq=norm(q); if(nq.length<2||!Array.isArray(TRACK_DATABASE))return [];
+    return TRACK_DATABASE.filter(t=>[t.name,t.city,t.province,t.region,...(t.aliases||[])].some(a=>{const na=norm(a);return na===nq||na.includes(nq)||nq.includes(na)}));
   };
-  const asPlace=t=>({kind:'track',name:t.name,admin1:`${t.city} · ${t.region}`,country:'PISTA KZ',latitude:t.latitude,longitude:t.longitude,label:`${t.name}, ${t.city}`});
+  const asPlace=t=>({
+    kind:'track',name:t.name,admin1:`${t.city} · ${t.region}`,country:'ACI SPORT',
+    latitude:t.latitude,longitude:t.longitude,label:`${t.name}, ${t.city}`,track:t
+  });
+
+  async function geocodeTrackLocality(t){
+    const expanded=String(t.city||'').replace(/^S\.\s*/i,'San ');
+    const candidates=[t.city,expanded,...(t.aliases||[])]
+      .filter(Boolean)
+      .filter((x,i,a)=>a.findIndex(y=>norm(y)===norm(x))===i)
+      .filter(x=>!/(kart|pista|circuit|track)/i.test(x))
+      .slice(0,4);
+    if(!candidates.length)candidates.push(t.city);
+
+    for(const query of candidates){
+      try{
+        const r=await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=10&language=it&format=json`);
+        const j=await r.json();
+        const rows=j.results||[];
+        if(!rows.length)continue;
+        const italian=rows.filter(p=>String(p.country_code||'').toUpperCase()==='IT'||norm(p.country)==='italia');
+        const pool=italian.length?italian:rows;
+        const regionMatch=pool.find(p=>norm(p.admin1)===norm(t.region)||norm(p.admin1).includes(norm(t.region))||norm(t.region).includes(norm(p.admin1)));
+        const cityMatch=pool.find(p=>norm(p.name)===norm(t.city)||norm(p.name)===norm(expanded));
+        const p=regionMatch||cityMatch||pool[0];
+        if(Number.isFinite(p?.latitude)&&Number.isFinite(p?.longitude))return p;
+      }catch{}
+    }
+    throw Error(`Località ACI non risolta: ${t.city}`);
+  }
+
+  async function selectSearchResult(p){
+    clearPlaceResults();
+    $('place').value=p.name;
+    if(p.kind==='track'&&p.track&&!hasCoords(p.track)){
+      setInlineMessage('weatherMsg',`Risolvo ${p.track.name} · ${p.track.city}...`);
+      try{
+        const g=await geocodeTrackLocality(p.track);
+        await loadWeather(g.latitude,g.longitude,p.label);
+      }catch(e){setInlineMessage('weatherMsg','Errore: '+e.message,true)}
+      return;
+    }
+    await loadWeather(p.latitude,p.longitude,p.label||`${p.name}${p.admin1?', '+p.admin1:''}`);
+  }
 
   window.renderPlaceResults=function(results){
     const box=$('placeResults'); if(!box)return;
     placeSearchResults=results.slice(0,4); box.innerHTML='';
     placeSearchResults.forEach(p=>{
       const b=document.createElement('button'); b.type='button'; b.className='placeResult';
-      const meta=p.kind==='track'?`PISTA · ${p.admin1}`:[p.admin1,p.country].filter(Boolean).join(' · ');
+      const meta=p.kind==='track'?`PISTA ACI · ${p.admin1}`:[p.admin1,p.country].filter(Boolean).join(' · ');
       b.innerHTML=`<strong>${p.name}</strong>${meta?`<span>${meta}</span>`:''}`;
-      b.onclick=()=>{clearPlaceResults();$('place').value=p.name;loadWeather(p.latitude,p.longitude,p.label||`${p.name}${p.admin1?', '+p.admin1:''}`)};
+      b.onclick=()=>selectSearchResult(p);
       box.appendChild(b);
     });
     box.hidden=false;
@@ -25,16 +69,16 @@
     if(!q){setInlineMessage('weatherMsg','Inserisci una località o il nome di una pista.');return}
     setInlineMessage('weatherMsg','Ricerca pista / località...');
     const tracks=trackMatches(q);
-    if(tracks.length===1){
-      const p=asPlace(tracks[0]); $('place').value=p.name;
-      await loadWeather(p.latitude,p.longitude,p.label); return;
-    }
+    if(tracks.length===1){await selectSearchResult(asPlace(tracks[0]));return}
     try{
       const r=await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=4&language=it&format=json`),j=await r.json();
       const geo=(j.results||[]).slice(0,4).map(p=>({...p,kind:'place'}));
-      const combined=[...tracks.map(asPlace),...geo].filter((p,i,a)=>a.findIndex(x=>x.name===p.name&&Math.abs(x.latitude-p.latitude)<.002&&Math.abs(x.longitude-p.longitude)<.002)===i).slice(0,4);
+      const combined=[...tracks.map(asPlace),...geo].filter((p,i,a)=>{
+        if(p.kind==='track')return a.findIndex(x=>x.kind==='track'&&x.track?.id===p.track?.id)===i;
+        return a.findIndex(x=>x.kind!=='track'&&x.name===p.name&&Math.abs((x.latitude||0)-(p.latitude||0))<.002&&Math.abs((x.longitude||0)-(p.longitude||0))<.002)===i;
+      }).slice(0,4);
       if(!combined.length)throw Error('Pista o località non trovata');
-      if(combined.length===1){const p=combined[0];$('place').value=p.name;await loadWeather(p.latitude,p.longitude,p.label||`${p.name}${p.admin1?', '+p.admin1:''}`)}
+      if(combined.length===1)await selectSearchResult(combined[0]);
       else{renderPlaceResults(combined);setInlineMessage('weatherMsg','Seleziona la pista o la località corretta tra i risultati.')}
     }catch(e){
       if(tracks.length){renderPlaceResults(tracks.map(asPlace));setInlineMessage('weatherMsg','Seleziona la pista corretta tra i risultati.');return}
