@@ -1,0 +1,16 @@
+/* Compact, sober KZ CarbWeather brand + weather KPI rebalance */
+.brandV2{display:flex;align-items:center;min-width:0;flex:1 1 520px}
+.kzBrandLogo{display:block;width:clamp(360px,34vw,590px);height:auto;max-height:78px;overflow:visible}
+.weatherMetrics4{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+
+@media(max-width:1100px){
+  .kzBrandLogo{width:clamp(330px,48vw,520px);max-height:70px}
+}
+@media(max-width:850px){
+  .brandV2{width:100%;flex-basis:100%}
+  .kzBrandLogo{width:min(100%,520px);max-height:68px}
+}
+@media(max-width:720px){
+  .kzBrandLogo{width:min(100%,430px);max-height:58px}
+  .weatherMetrics4{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
