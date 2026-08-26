@@ -12,11 +12,10 @@ const [template, ...uiParts] = await Promise.all([
   read('ui3.html')
 ]);
 
-if (!template.includes('<!--KZ_UI-->')) {
-  throw new Error('index.html: marker <!--KZ_UI--> missing');
+for (const marker of ['<!--KZ_UI-->','<!--KZ_CSS-->','<!--KZ_JS-->']) {
+  if (!template.includes(marker)) throw new Error(`index.html: marker ${marker} missing`);
 }
 
-const html = template.replace('<!--KZ_UI-->', uiParts.join('\n'));
 const app = (await Promise.all([
   'data.js',
   'app-core.js',
@@ -24,18 +23,23 @@ const app = (await Promise.all([
   'race-ui.js',
   'cloud.js'
 ].map(read))).join('\n\n');
+
 const css = (await Promise.all([
   'styles.css',
   'race.css',
-  'cloud.css'
+  'cloud.css',
+  'layout-fixes.css'
 ].map(read))).join('\n\n');
+
+const html = template
+  .replace('<!--KZ_UI-->', uiParts.join('\n'))
+  .replace('<!--KZ_CSS-->', css)
+  .replace('<!--KZ_JS-->', app);
 
 await Promise.all([
   writeFile('dist/index.html', html),
-  writeFile('dist/app.js', app),
-  writeFile('dist/styles.css', css),
   copyFile('manifest.webmanifest', 'dist/manifest.webmanifest'),
   copyFile('sw.js', 'dist/sw.js')
 ]);
 
-console.log(`KZ CarbWeather build: ${uiParts.length} UI fragments -> index.html; 5 JS sources -> app.js; 3 CSS sources -> styles.css`);
+console.log('KZ CarbWeather build: single HTML runtime generated with UI + CSS + JS inline; cloud sync included.');
