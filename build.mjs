@@ -18,10 +18,12 @@ for (const marker of ['<!--KZ_UI-->','<!--KZ_CSS-->','<!--KZ_JS-->']) {
 
 const app = (await Promise.all([
   'data.js',
+  'tracks.js',
   'app-core.js',
   'app-telemetry.js',
   'race-ui.js',
-  'cloud.js'
+  'cloud.js',
+  'app-enhancements.js'
 ].map(read))).join('\n\n');
 
 const css = (await Promise.all([
@@ -42,4 +44,4 @@ await Promise.all([
   copyFile('sw.js', 'dist/sw.js')
 ]);
 
-console.log('KZ CarbWeather build: single HTML runtime generated with UI + CSS + JS inline; cloud sync included.');
+console.log('KZ CarbWeather build: single HTML runtime generated; track DB, cloud sync and auth redirect handling included.');
