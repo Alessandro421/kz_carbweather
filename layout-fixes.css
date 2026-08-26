@@ -42,5 +42,8 @@
 }
 
 @media(max-width:720px){
-  .headerDataTools{display:none}
+  .headerDataTools{display:flex;width:100%;justify-content:flex-start}
+  .headerDataTools>.badge,.headerDataActions{display:none}
+  .cloudBox{display:block;order:0}
+  .cloudChip{min-height:42px;padding:8px 10px}
 }
