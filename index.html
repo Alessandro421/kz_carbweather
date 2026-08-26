@@ -9,13 +9,15 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="race.css">
+<link rel="stylesheet" href="cloud.css">
 <title>KZ CarbWeather — Dell'Orto VHSH 30 CS</title></head><body>
 <div id="app">Caricamento…</div>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (async()=>{
  const parts=await Promise.all(['ui1.html','ui2.html','ui3.html'].map(x=>fetch(x).then(r=>r.text())));
  document.getElementById('app').outerHTML=parts.join('');
- for(const src of ['data.js','app-core.js','app-telemetry.js','race-ui.js']){await new Promise((ok,ko)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=ko;document.body.appendChild(s);});}
+ for(const src of ['data.js','app-core.js','app-telemetry.js','race-ui.js','cloud.js']){await new Promise((ok,ko)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=ko;document.body.appendChild(s);});}
 })();
 </script></body></html>
