@@ -1,0 +1,46 @@
+/* v1.6 layout fixes: desktop track summary + cloud header */
+.headerDataTools{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap;min-width:0}
+.headerDataActions{display:flex;gap:6px;align-items:center}
+.cloudBox{margin-left:0!important;flex:0 0 auto}
+.cloudChip{white-space:nowrap}
+.mobileHero,.mobileHero *{box-sizing:border-box;min-width:0}
+
+@media(min-width:1350px){
+  .grid{padding-right:302px}
+  .mobileHero{
+    width:282px;
+    right:max(1.5vw,calc((100vw - 1760px)/2));
+    top:14px;
+    max-height:calc(100vh - 28px);
+    overflow-y:auto;
+    overflow-x:hidden;
+    padding:12px;
+  }
+  .mobileHero .kicker{font-size:9px}
+  .mobileHero .trackTitle{font-size:13px;margin:5px 0 2px}
+  .mobileHero .weatherLine{font-size:11px;margin-bottom:10px}
+  .mobileHero .suggestGrid{gap:6px}
+  .mobileHero .suggestMain{padding:11px}
+  .mobileHero .suggestMain .n{font-size:46px}
+  .mobileHero .mini{padding:9px}
+  .mobileHero .mini .n{font-size:21px}
+  .mobileHero .egtStrip{gap:6px;margin-top:6px}
+  .mobileHero .egtBox{padding:9px}
+  .mobileHero .egtBox .n{font-size:25px}
+  .mobileHero .mobileActions{gap:6px;margin-top:7px}
+  .mobileHero .mobileActions button{min-height:38px;padding:8px 9px;font-size:10px}
+  header{padding-right:300px}
+}
+
+@media(min-width:721px) and (max-width:1349px){
+  .mobileHero{overflow-x:hidden}
+}
+
+@media(max-width:850px){
+  .headerDataTools{width:100%;justify-content:flex-start}
+  .cloudBox{order:-1}
+}
+
+@media(max-width:720px){
+  .headerDataTools{display:none}
+}
