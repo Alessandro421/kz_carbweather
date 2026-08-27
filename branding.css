@@ -98,3 +98,26 @@ select{
 .cloudOnlineDot{
   border-color:rgba(37,99,235,.28);
 }
+
+/* Language selector only. Existing app layout, logo and component sizing are untouched. */
+.langSelect{
+  width:72px;
+  min-width:72px;
+  min-height:34px;
+  padding:7px 24px 7px 9px;
+  flex:0 0 auto;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--race-white,#f7f7f4);
+  background:#0d1014;
+  border-color:rgba(37,99,235,.46);
+}
+.langSelect:focus{
+  border-color:var(--kz-royal-blue,#2563eb);
+  box-shadow:0 0 0 1px rgba(37,99,235,.24),0 0 14px rgba(37,99,235,.12);
+}
+@media(max-width:720px){
+  .langSelect{min-height:42px;width:72px;min-width:72px;padding-top:8px;padding-bottom:8px}
+}
