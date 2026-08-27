@@ -79,8 +79,6 @@ const smokeDocument = {
   getElementById:id=>smokeElements.get(id)||null,
   createElement:tag=>tag==='option'?{value:'',textContent:''}:makeInput('')
 };
-const smokeCode = `${preparedSources[jsFiles.indexOf('data.js')]}\n${preparedSources[jsFiles.indexOf('app-core.js')]}\ninitComponentDB();\nreturn {\n  bMain:{value:bMain.value,count:bMain.options.length},\n};`;
-/* data/app-core use document.getElementById through $, so inspect via document after execution. */
 try {
   new Function('window','document','localStorage', `${preparedSources[jsFiles.indexOf('data.js')]}\n${preparedSources[jsFiles.indexOf('app-core.js')]}\ninitComponentDB();`)(
     {}, smokeDocument, {getItem:()=>null,setItem(){},removeItem(){}}
@@ -99,6 +97,38 @@ for (const [id,value] of Object.entries(expected)) {
   if (el.value!==value) throw new Error(`Runtime smoke test: #${id}=${el.value}, expected ${value}`);
 }
 console.log('KZ runtime smoke test: component selects populated with expected defaults.');
+
+/* Build gate 2b: execute the isolated i18n runtime and verify real static + dynamic translations. */
+const i18nWindow={};
+const i18nDocument={readyState:'loading',addEventListener(){}};
+try {
+  new Function('window','document','localStorage','Node','MutationObserver', preparedSources[jsFiles.indexOf('i18n.js')])(
+    i18nWindow,
+    i18nDocument,
+    {getItem:()=>null,setItem(){},removeItem(){}},
+    {TEXT_NODE:3,ELEMENT_NODE:1,DOCUMENT_FRAGMENT_NODE:11,DOCUMENT_NODE:9},
+    class { observe(){} }
+  );
+} catch (error) {
+  console.error('KZ i18n runtime smoke test crashed');
+  throw error;
+}
+if (!i18nWindow.KZI18N) throw new Error('Runtime smoke test: KZI18N API missing');
+const translationCases=[
+  ['Setup di riferimento','en','Reference setup'],
+  ['Setup di riferimento','es','Configuración de referencia'],
+  ['Setup di riferimento','de','Referenz-Setup'],
+  ['Tacca · 5 tacche fisiche · step 0,5','en','Clip · 5 physical positions · step 0.5'],
+  ['Correzioni suggerite: minimo 60→62 · tacca 3→3.5.','es','Correcciones sugeridas: baja 60→62 · clip 3→3.5.'],
+  ['ALFANO 7 · 12 giri classificati · 840 campioni T2','de','ALFANO 7 · 12 gewertete Runden · 840 T2-Messwerte'],
+  ['Login per sincronizzare PC e smartphone.','de','Anmelden, um PC und Smartphone zu synchronisieren.']
+];
+for (const [source,target,want] of translationCases) {
+  const got=i18nWindow.KZI18N.translate(source,target);
+  if (got!==want) throw new Error(`i18n smoke test ${target}: ${JSON.stringify(got)} != ${JSON.stringify(want)}`);
+}
+if (i18nWindow.KZI18N.supported.join(',')!=='it,en,es,de') throw new Error('Runtime smoke test: language set is incomplete');
+console.log('KZ i18n smoke test: IT/EN/ES/DE static and dynamic translations passed.');
 
 const bootstrap = String.raw`
 (function(){
