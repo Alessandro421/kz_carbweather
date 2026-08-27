@@ -1,4 +1,4 @@
-const CACHE='kz-carbweather-v1.8-appshell';
+const CACHE='kz-carbweather-v1.9-appshell';
 const ASSETS=['./','./index.html','./manifest.webmanifest'];
 
 self.addEventListener('install',e=>{
