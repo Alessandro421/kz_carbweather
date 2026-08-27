@@ -134,6 +134,14 @@ const bootstrap = String.raw`
 
 const app = [...preparedSources, bootstrap].join('\n\n');
 
+/* Hard build gate: the exact inline JavaScript shipped to the browser must parse. */
+try {
+  new Function(app);
+} catch (error) {
+  console.error('KZ bundle JavaScript syntax check failed');
+  throw error;
+}
+
 const css = (await Promise.all([
   'styles.css',
   'race.css',
@@ -147,10 +155,16 @@ const html = template
   .replace('<!--KZ_CSS-->', css)
   .replace('<!--KZ_JS-->', app);
 
+/* Structural smoke checks for the critical baseline controls. */
+for (const id of ['bMain','bNeedle','bAtom','bIdle','bIdleB','bSlide','tMain','tNeedle','tAtom','tIdle','tIdleB','tSlide']) {
+  if (!html.includes(`id=\"${id}\"`)) throw new Error(`Smoke test: missing #${id}`);
+}
+if (!app.includes('initComponentDB()')) throw new Error('Smoke test: initComponentDB is not invoked');
+
 await Promise.all([
   writeFile('dist/index.html', html),
   copyFile('manifest.webmanifest', 'dist/manifest.webmanifest'),
   copyFile('sw.js', 'dist/sw.js')
 ]);
 
-console.log('KZ CarbWeather build: single HTML runtime generated; guarded end-of-bundle startup enabled.');
+console.log('KZ CarbWeather build: JS syntax + structural smoke checks passed.');
