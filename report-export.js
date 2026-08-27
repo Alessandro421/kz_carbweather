@@ -49,13 +49,10 @@
   }
 
   function drawReport(){
-    if(!window.weather){
-      showToast(t('loadWeather'),'warning',4200);
-      return;
-    }
+    const currentWeather=typeof weather!=='undefined'?weather:null;
+    if(!currentWeather){showToast(t('loadWeather'),'warning',4200);return}
     if(typeof calculateSuggestedSetup==='function')calculateSuggestedSetup();
-    if(!window.suggestedSetup && typeof suggestedSetup!=='undefined' && suggestedSetup) window.suggestedSetup=suggestedSetup;
-    const s=window.suggestedSetup || (typeof suggestedSetup!=='undefined'?suggestedSetup:null);
+    const s=typeof suggestedSetup!=='undefined'?suggestedSetup:null;
     if(!s){showToast(t('loadWeather'),'warning',4200);return}
 
     const W=1800,H=1220,canvas=document.createElement('canvas');canvas.width=W;canvas.height=H;
@@ -68,17 +65,17 @@
     ctx.fillStyle='#8e9bad';ctx.font='700 22px Arial';ctx.fillText(t('subtitle'),72,132);
 
     const now=new Date();
-    ctx.fillStyle='#f7f7f4';ctx.font='900 38px Arial';wrap(ctx,weather.label||val('logPlace')||'—',72,194,1080,44,2);
+    ctx.fillStyle='#f7f7f4';ctx.font='900 38px Arial';wrap(ctx,currentWeather.label||val('logPlace')||'—',72,194,1080,44,2);
     ctx.fillStyle='#8e9bad';ctx.font='600 21px Arial';ctx.fillText(`${t('generated')}: ${now.toLocaleString(locale())}`,72,246);
-    ctx.fillStyle='#8e9bad';ctx.font='600 21px Arial';ctx.textAlign='right';ctx.fillText(`KZ Race · VHSH 30 CS`,W-72,92);ctx.textAlign='left';
+    ctx.fillStyle='#8e9bad';ctx.font='600 21px Arial';ctx.textAlign='right';ctx.fillText('KZ Race · VHSH 30 CS',W-72,92);ctx.textAlign='left';
 
     sectionTitle(ctx,t('atmosphere'),310);
     const gap=18,cardW=(W-140-gap*4)/5,cardH=132,y1=338;
     const pct=Number(s.pct);
-    metric(ctx,70,y1,cardW,cardH,t('temperature'),`${nfmt(weather.temp,1)} °C`);
-    metric(ctx,70+(cardW+gap),y1,cardW,cardH,t('humidity'),`${nfmt(weather.rh,0)} %`);
-    metric(ctx,70+(cardW+gap)*2,y1,cardW,cardH,t('pressure'),`${nfmt(weather.press,0)} hPa`);
-    metric(ctx,70+(cardW+gap)*3,y1,cardW,cardH,t('density'),`${nfmt(weather.rho,3)} kg/m³`);
+    metric(ctx,70,y1,cardW,cardH,t('temperature'),`${nfmt(currentWeather.temp,1)} °C`);
+    metric(ctx,70+(cardW+gap),y1,cardW,cardH,t('humidity'),`${nfmt(currentWeather.rh,0)} %`);
+    metric(ctx,70+(cardW+gap)*2,y1,cardW,cardH,t('pressure'),`${nfmt(currentWeather.press,0)} hPa`);
+    metric(ctx,70+(cardW+gap)*3,y1,cardW,cardH,t('density'),`${nfmt(currentWeather.rho,3)} kg/m³`);
     metric(ctx,70+(cardW+gap)*4,y1,cardW,cardH,t('densityDelta'),`${pct>=0?'+':''}${nfmt(pct,1)} %`,{accent:true});
 
     sectionTitle(ctx,t('setup'),540);
@@ -113,7 +110,7 @@
     ctx.fillStyle='#778596';ctx.font='600 17px Arial';wrap(ctx,t('disclaimer'),72,H-34,W-144,22,2);
 
     const stamp=now.toISOString().slice(0,16).replace(/[:T]/g,'-');
-    const filename=`KZ-CarbWeather-${clean(weather.label||val('logPlace'))}-${stamp}.jpg`;
+    const filename=`KZ-CarbWeather-${clean(currentWeather.label||val('logPlace'))}-${stamp}.jpg`;
     canvas.toBlob(blob=>{
       if(!blob){showToast('JPEG export error','error');return}
       const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1200);showToast(t('done'),'success');
