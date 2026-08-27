@@ -29,12 +29,6 @@ const jsFiles = [
 
 const jsSources = await Promise.all(jsFiles.map(read));
 
-/*
-  app-telemetry.js historically bootstrapped the application at file scope.
-  In the single-file bundle that means startup happens before the modules that
-  follow it have finished their own initialization. Strip that legacy boot line
-  and run one guarded bootstrap after every module has been evaluated.
-*/
 const preparedSources = jsSources.map((source, index) => {
   if (jsFiles[index] !== 'app-telemetry.js') return source;
   return source
@@ -42,6 +36,15 @@ const preparedSources = jsSources.map((source, index) => {
     .filter(line => !line.startsWith("$('logDate').value="))
     .join('\n');
 });
+
+/* Diagnose each source independently before concatenation. */
+for (let i=0;i<preparedSources.length;i++) {
+  try { new Function(preparedSources[i]); }
+  catch (error) {
+    console.error(`KZ source syntax check failed: ${jsFiles[i]}`);
+    throw error;
+  }
+}
 
 const bootstrap = String.raw`
 (function(){
@@ -134,10 +137,8 @@ const bootstrap = String.raw`
 
 const app = [...preparedSources, bootstrap].join('\n\n');
 
-/* Hard build gate: the exact inline JavaScript shipped to the browser must parse. */
-try {
-  new Function(app);
-} catch (error) {
+try { new Function(app); }
+catch (error) {
   console.error('KZ bundle JavaScript syntax check failed');
   throw error;
 }
@@ -155,7 +156,6 @@ const html = template
   .replace('<!--KZ_CSS-->', css)
   .replace('<!--KZ_JS-->', app);
 
-/* Structural smoke checks for the critical baseline controls. */
 for (const id of ['bMain','bNeedle','bAtom','bIdle','bIdleB','bSlide','tMain','tNeedle','tAtom','tIdle','tIdleB','tSlide']) {
   if (!html.includes(`id=\"${id}\"`)) throw new Error(`Smoke test: missing #${id}`);
 }
