@@ -58,6 +58,47 @@ for (let i=0;i<preparedSources.length;i++) {
   }
 }
 
+/*
+  Build gate 2: execute the real component DB initialization against a tiny DOM.
+  This catches the exact regression where the baseline/test selects rendered empty.
+*/
+const makeInput = (value='') => ({value:String(value),textContent:'',min:'',max:'',step:'',className:'',classList:{toggle(){},contains(){return false}},addEventListener(){}});
+const makeSelect = () => {
+  const el = makeInput('');
+  el.options=[];
+  let html='';
+  Object.defineProperty(el,'innerHTML',{get(){return html},set(v){html=String(v);if(v==='')el.options.length=0}});
+  el.appendChild = option => { el.options.push(option); if(!el.value) el.value=String(option.value??''); return option; };
+  return el;
+};
+const smokeIds = ['bMain','tMain','bNeedle','tNeedle','bAtom','tAtom','bIdle','tIdle','bIdleB','tIdleB','bSlide','tSlide'];
+const smokeElements = new Map(smokeIds.map(id=>[id,makeSelect()]));
+for (const [id,value] of Object.entries({bClip:3,tClip:3,bA:'',bB:'',bC:'',tA:'',tB:'',tC:'',bNeedleInfo:'',tNeedleInfo:''})) smokeElements.set(id,makeInput(value));
+const smokeDocument = {
+  getElementById:id=>smokeElements.get(id)||null,
+  createElement:tag=>tag==='option'?{value:'',textContent:''}:makeInput('')
+};
+const smokeCode = `${preparedSources[jsFiles.indexOf('data.js')]}\n${preparedSources[jsFiles.indexOf('app-core.js')]}\ninitComponentDB();\nreturn {\n  bMain:{value:bMain.value,count:bMain.options.length},\n};`;
+/* data/app-core use document.getElementById through $, so inspect via document after execution. */
+try {
+  new Function('window','document','localStorage', `${preparedSources[jsFiles.indexOf('data.js')]}\n${preparedSources[jsFiles.indexOf('app-core.js')]}\ninitComponentDB();`)(
+    {}, smokeDocument, {getItem:()=>null,setItem(){},removeItem(){}}
+  );
+} catch (error) {
+  console.error('KZ component DB runtime smoke test crashed');
+  throw error;
+}
+const expected = {
+  bMain:'180', tMain:'180', bNeedle:'K98', tNeedle:'K100', bAtom:'DP268', tAtom:'DP268',
+  bIdle:'60', tIdle:'60', bIdleB:'48', tIdleB:'48', bSlide:'50', tSlide:'50'
+};
+for (const [id,value] of Object.entries(expected)) {
+  const el=smokeElements.get(id);
+  if (!el || el.options.length===0) throw new Error(`Runtime smoke test: #${id} has no options`);
+  if (el.value!==value) throw new Error(`Runtime smoke test: #${id}=${el.value}, expected ${value}`);
+}
+console.log('KZ runtime smoke test: component selects populated with expected defaults.');
+
 const bootstrap = String.raw`
 (function(){
   if (window.__kzAppInitialized) return;
@@ -149,7 +190,7 @@ const bootstrap = String.raw`
 
 const app = [...preparedSources, bootstrap].join('\n\n');
 
-/* Build gate 2: the exact concatenated browser bundle must parse. */
+/* Build gate 3: the exact concatenated browser bundle must parse. */
 try { new Function(app); }
 catch (error) {
   console.error('KZ bundle JavaScript syntax check failed');
@@ -169,7 +210,7 @@ const html = template
   .replace('<!--KZ_CSS-->', css)
   .replace('<!--KZ_JS-->', app);
 
-/* Build gate 3: critical controls and startup call must be in final HTML. */
+/* Build gate 4: critical controls and startup call must be in final HTML. */
 for (const id of ['bMain','bNeedle','bAtom','bIdle','bIdleB','bSlide','tMain','tNeedle','tAtom','tIdle','tIdleB','tSlide']) {
   if (!html.includes(`id=\"${id}\"`)) throw new Error(`Smoke test: missing #${id}`);
 }
@@ -181,4 +222,4 @@ await Promise.all([
   copyFile('sw.js', 'dist/sw.js')
 ]);
 
-console.log('KZ CarbWeather build: all JS syntax and structural smoke checks passed.');
+console.log('KZ CarbWeather build: syntax, runtime select population and structural smoke checks passed.');
