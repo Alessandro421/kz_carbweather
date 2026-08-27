@@ -23,7 +23,7 @@ const TRACK_DATABASE = [
   {id:'alberone',name:'Alberone',city:'S. Pietro al Natisone',province:'UD',region:'Friuli Venezia Giulia',country:'Italia',latitude:null,longitude:null,aliases:['alberone kart','san pietro al natisone','s pietro al natisone']},
 
   // TRENTINO ALTO ADIGE
-  {id:'pista-ala',name:'Pista Ala',city:'Ala di Trento',province:'TN',region:'Trentino-Alto Adige',country:'Italia',latitude:null,longitude:null,aliases:['ala kart','kartodromo ala']},
+  {id:'pista-ala',name:'Pista Ala',city:'Ala di Trento',province:'TN',region:'Trentino-Alto Adige',country:'Italia',latitude:45.78593,longitude:11.01237,aliases:['ala','ala kart','ala karting circuit','kartodromo ala','kartodromo di ala']},
 
   // EMILIA-ROMAGNA
   {id:'pomposa',name:'Pomposa',city:'S. Giuseppe di Comacchio',province:'FE',region:'Emilia-Romagna',country:'Italia',latitude:null,longitude:null,aliases:['pomposa kart','comacchio','san giuseppe di comacchio']},
