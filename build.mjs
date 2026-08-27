@@ -30,14 +30,26 @@ const jsFiles = [
 const jsSources = await Promise.all(jsFiles.map(read));
 
 const preparedSources = jsSources.map((source, index) => {
-  if (jsFiles[index] !== 'app-telemetry.js') return source;
-  return source
-    .split('\n')
-    .filter(line => !line.startsWith("$('logDate').value="))
-    .join('\n');
+  const file = jsFiles[index];
+  if (file === 'app-core.js') {
+    /* Repair the historical extra closing brace on updateMobileHero in source. */
+    return source.split('\n').map(line =>
+      line.startsWith('function updateMobileHero()') && line.endsWith('}}')
+        ? line.slice(0,-1)
+        : line
+    ).join('\n');
+  }
+  if (file === 'app-telemetry.js') {
+    /* Startup must happen once, after all bundled modules are evaluated. */
+    return source
+      .split('\n')
+      .filter(line => !line.startsWith("$('logDate').value="))
+      .join('\n');
+  }
+  return source;
 });
 
-/* Diagnose each source independently before concatenation. */
+/* Build gate 1: every source must parse independently. */
 for (let i=0;i<preparedSources.length;i++) {
   try { new Function(preparedSources[i]); }
   catch (error) {
@@ -137,6 +149,7 @@ const bootstrap = String.raw`
 
 const app = [...preparedSources, bootstrap].join('\n\n');
 
+/* Build gate 2: the exact concatenated browser bundle must parse. */
 try { new Function(app); }
 catch (error) {
   console.error('KZ bundle JavaScript syntax check failed');
@@ -156,6 +169,7 @@ const html = template
   .replace('<!--KZ_CSS-->', css)
   .replace('<!--KZ_JS-->', app);
 
+/* Build gate 3: critical controls and startup call must be in final HTML. */
 for (const id of ['bMain','bNeedle','bAtom','bIdle','bIdleB','bSlide','tMain','tNeedle','tAtom','tIdle','tIdleB','tSlide']) {
   if (!html.includes(`id=\"${id}\"`)) throw new Error(`Smoke test: missing #${id}`);
 }
@@ -167,4 +181,4 @@ await Promise.all([
   copyFile('sw.js', 'dist/sw.js')
 ]);
 
-console.log('KZ CarbWeather build: JS syntax + structural smoke checks passed.');
+console.log('KZ CarbWeather build: all JS syntax and structural smoke checks passed.');
