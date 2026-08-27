@@ -24,7 +24,8 @@ const jsFiles = [
   'race-ui.js',
   'cloud.js',
   'app-enhancements.js',
-  'branding.js'
+  'branding.js',
+  'i18n.js'
 ];
 
 const jsSources = await Promise.all(jsFiles.map(read));
@@ -210,11 +211,14 @@ const html = template
   .replace('<!--KZ_CSS-->', css)
   .replace('<!--KZ_JS-->', app);
 
-/* Build gate 4: critical controls and startup call must be in final HTML. */
+/* Build gate 4: critical controls, i18n selector and startup call must be in final HTML/bundle. */
 for (const id of ['bMain','bNeedle','bAtom','bIdle','bIdleB','bSlide','tMain','tNeedle','tAtom','tIdle','tIdleB','tSlide']) {
   if (!html.includes(`id=\"${id}\"`)) throw new Error(`Smoke test: missing #${id}`);
 }
 if (!app.includes('initComponentDB()')) throw new Error('Smoke test: initComponentDB is not invoked');
+if (!app.includes("select.id='languageSelect'")) throw new Error('Smoke test: language selector is not bundled');
+if (!app.includes("SUPPORTED=['it','en','es','de']")) throw new Error('Smoke test: IT/EN/ES/DE language set is incomplete');
+if (!app.includes('window.KZI18N')) throw new Error('Smoke test: i18n runtime API is not bundled');
 
 await Promise.all([
   writeFile('dist/index.html', html),
@@ -222,4 +226,4 @@ await Promise.all([
   copyFile('sw.js', 'dist/sw.js')
 ]);
 
-console.log('KZ CarbWeather build: syntax, runtime select population and structural smoke checks passed.');
+console.log('KZ CarbWeather build: syntax, runtime select population, i18n and structural smoke checks passed.');
