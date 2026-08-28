@@ -183,14 +183,15 @@ async function saveBaselineCloud(){
 }
 
 async function pullBaselineCloud(){
-  if(!cloudUser)return;
-  const {data}=await cloud.from('baselines').select('data').eq('user_id',cloudUser.id).eq('name','Default').maybeSingle();
-  if(data?.data){
-    Object.entries(data.data).forEach(([k,v])=>{if(document.getElementById(k))document.getElementById(k).value=v});
-    localStorage.setItem('cw_baseline',JSON.stringify(data.data));
-    loadNeedleGeometry('b');
-    calcCorrection();
-  }
+  if(!cloudUser)return false;
+  const {data,error}=await cloud.from('baselines').select('data').eq('user_id',cloudUser.id).eq('name','Default').maybeSingle();
+  if(error)throw error;
+  if(!data?.data)return false;
+  Object.entries(data.data).forEach(([k,v])=>{if(document.getElementById(k))document.getElementById(k).value=v});
+  localStorage.setItem('cw_baseline',JSON.stringify(data.data));
+  loadNeedleGeometry('b');
+  calcCorrection();
+  return true;
 }
 
 async function syncLogsCloud(){
@@ -234,8 +235,8 @@ async function syncAllCloud(){
   if(!cloudUser)return cloudMsg('Fai login prima.');
   cloudStatus('SYNC…');
   try{
-    await saveBaselineCloud();
-    await pullBaselineCloud();
+    const hasCloudBaseline=await pullBaselineCloud();
+    if(!hasCloudBaseline)await saveBaselineCloud();
     await syncLogsCloud();
     await saveTelemetryCloud();
     await refreshCloudArchive();
