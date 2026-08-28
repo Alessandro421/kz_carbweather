@@ -1,9 +1,16 @@
 {
+  "id": "./",
   "name": "KZ CarbWeather",
   "short_name": "KZ Carb",
+  "description": "Dell'Orto VHSH 30 KZ carburation assistant with weather and Alfano telemetry.",
+  "lang": "it-IT",
+  "dir": "ltr",
   "start_url": "./",
+  "scope": "./",
   "display": "standalone",
+  "orientation": "portrait-primary",
   "background_color": "#0c0f12",
   "theme_color": "#101317",
-  "description": "Dell'Orto VHSH 30 KZ carburation assistant with weather and Alfano telemetry."
+  "categories": ["sports", "utilities"],
+  "prefer_related_applications": false
 }
