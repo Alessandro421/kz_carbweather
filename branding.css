@@ -121,3 +121,9 @@ select{
 @media(max-width:720px){
   .langSelect{min-height:42px;width:72px;min-width:72px;padding-top:8px;padding-bottom:8px}
 }
+
+/* Mobile: expose the existing JPEG report action without re-enabling backup/import controls. */
+@media(max-width:720px){
+  .headerDataActions{display:flex!important;width:auto}
+  .headerDataActions>button:not(:first-child){display:none}
+}
