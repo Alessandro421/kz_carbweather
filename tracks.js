@@ -2,7 +2,7 @@
    Exact track coordinates are kept only where already verified; other entries are resolved by ACI locality at search time. */
 const TRACK_DATABASE = [
   // LOMBARDIA
-  {id:'cremona-circuit',name:'Cremona Circuit',city:'Cremona',province:'CR',region:'Lombardia',country:'Italia',latitude:null,longitude:null,aliases:['kart cremona','cremona karting']},
+  {id:'cremona-circuit',name:'Cremona Circuit',city:'Cremona',province:'CR',region:'Lombardia',country:'Italia',latitude:45.086389,longitude:10.314444,aliases:['kart cremona','cremona karting']},
   {id:'south-garda-karting',name:'South Garda Karting',city:'Lonato',province:'BS',region:'Lombardia',country:'Italia',latitude:45.425096,longitude:10.490904,aliases:['south garda','lonato','lonato del garda','kartodromo lonato']},
   {id:'franciacorta-karting-track',name:'Franciacorta Karting Track',city:'Castrezzato',province:'BS',region:'Lombardia',country:'Italia',latitude:45.514170,longitude:10.000616,aliases:['franciacorta','franciacorta karting','castrezzato']},
   {id:'7-laghi',name:'7 Laghi',city:'Castelletto di Branduzzo',province:'PV',region:'Lombardia',country:'Italia',latitude:null,longitude:null,aliases:['sette laghi','7 laghi kart','castelletto','castelletto di branduzzo']},
