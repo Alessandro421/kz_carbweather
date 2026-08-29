@@ -5,7 +5,7 @@ const TRACK_DATABASE = [
   {id:'cremona-circuit',name:'Cremona Circuit',city:'Cremona',province:'CR',region:'Lombardia',country:'Italia',latitude:45.086389,longitude:10.314444,aliases:['kart cremona','cremona karting']},
   {id:'south-garda-karting',name:'South Garda Karting',city:'Lonato',province:'BS',region:'Lombardia',country:'Italia',latitude:45.425096,longitude:10.490904,aliases:['south garda','lonato','lonato del garda','kartodromo lonato']},
   {id:'franciacorta-karting-track',name:'Franciacorta Karting Track',city:'Castrezzato',province:'BS',region:'Lombardia',country:'Italia',latitude:45.514170,longitude:10.000616,aliases:['franciacorta','franciacorta karting','castrezzato']},
-  {id:'7-laghi',name:'7 Laghi',city:'Castelletto di Branduzzo',province:'PV',region:'Lombardia',country:'Italia',latitude:null,longitude:null,aliases:['sette laghi','7 laghi kart','castelletto','castelletto di branduzzo']},
+  {id:'7-laghi',name:'7 Laghi',city:'Castelletto di Branduzzo',province:'PV',region:'Lombardia',country:'Italia',latitude:45.068199,longitude:9.105280,aliases:['sette laghi','7 laghi kart','castelletto','castelletto di branduzzo']},
 
   // PIEMONTE
   {id:'le-sirene',name:'Le Sirene',city:'Viverone',province:'BI',region:'Piemonte',country:'Italia',latitude:null,longitude:null,aliases:['kart le sirene','viverone kart']},
