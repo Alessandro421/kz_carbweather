@@ -1,5 +1,11 @@
-const CACHE='kz-carbweather-v1.9-appshell';
-const ASSETS=['./','./index.html','./manifest.webmanifest'];
+const CACHE='kz-carbweather-v2.0-appshell';
+const ASSETS=[
+  './',
+  './index.html',
+  './manifest.webmanifest',
+  './icons/icon-192.png',
+  './icons/icon-512.png'
+];
 
 self.addEventListener('install',e=>{
   self.skipWaiting();
