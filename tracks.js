@@ -8,7 +8,7 @@ const TRACK_DATABASE = [
   {id:'7-laghi',name:'7 Laghi',city:'Castelletto di Branduzzo',province:'PV',region:'Lombardia',country:'Italia',latitude:45.068199,longitude:9.105280,aliases:['sette laghi','7 laghi kart','castelletto','castelletto di branduzzo']},
 
   // PIEMONTE
-  {id:'le-sirene',name:'Le Sirene',city:'Viverone',province:'BI',region:'Piemonte',country:'Italia',latitude:null,longitude:null,aliases:['kart le sirene','viverone kart']},
+  {id:'le-sirene',name:'Le Sirene',city:'Viverone',province:'BI',region:'Piemonte',country:'Italia',latitude:45.40969,longitude:8.07655,aliases:['kart le sirene','viverone kart']},
   {id:'pista-azzurra-borgoticino',name:'Pista Azzurra',city:'Borgoticino',province:'NO',region:'Piemonte',country:'Italia',latitude:null,longitude:null,aliases:['pista azzurra borgo ticino','borgo ticino','borgoticino']},
   {id:'winner-nizza-monferrato',name:'Winner',city:'Nizza Monferrato',province:'AT',region:'Piemonte',country:'Italia',latitude:null,longitude:null,aliases:['winner kart','nizza monferrato']},
   {id:'kart-planet',name:'Kart Planet',city:'Busca',province:'CN',region:'Piemonte',country:'Italia',latitude:null,longitude:null,aliases:['kartplanet','busca kart']},
