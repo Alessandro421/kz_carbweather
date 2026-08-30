@@ -21,6 +21,11 @@ for(const asset of assets){
   if(width!==asset.size||height!==asset.size)throw new Error(`PWA icon dimensions mismatch: ${asset.src} is ${width}x${height}`);
 }
 
+const sw=await readFile('sw.js','utf8');
+for(const asset of assets){
+  if(!sw.includes(`'./${asset.src}'`))throw new Error(`PWA icon missing from service-worker precache: ${asset.src}`);
+}
+
 await mkdir('dist/icons',{recursive:true});
 await Promise.all(assets.map(x=>copyFile(x.src,`dist/${x.src}`)));
-console.log('KZ PWA asset gate: Android 192/512 PNG icons and maskable metadata passed.');
+console.log('KZ PWA asset gate: Android 192/512 PNG icons, maskable metadata and offline precache passed.');
