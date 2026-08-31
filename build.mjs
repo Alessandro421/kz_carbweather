@@ -25,7 +25,8 @@ const jsFiles = [
   'cloud.js',
   'app-enhancements.js',
   'branding.js',
-  'i18n.js'
+  'i18n.js',
+  'network-status.js'
 ];
 
 const jsSources = await Promise.all(jsFiles.map(read));
@@ -129,6 +130,45 @@ for (const [source,target,want] of translationCases) {
 }
 if (i18nWindow.KZI18N.supported.join(',')!=='it,en,es,de') throw new Error('Runtime smoke test: language set is incomplete');
 console.log('KZ i18n smoke test: IT/EN/ES/DE static and dynamic translations passed.');
+
+/* Build gate 2c: network-state layer must expose explicit offline/online UI without issuing requests. */
+const networkEvents={};
+const networkMessages={weather:'',cloud:'',status:'',toast:''};
+const networkDocument={
+  readyState:'complete',
+  documentElement:{lang:'en',dataset:{}},
+  getElementById:id=>id==='weatherMsg'?{textContent:networkMessages.weather}:null,
+  addEventListener(){}
+};
+const networkWindow={
+  KZI18N:{getLanguage:()=> 'en'},
+  addEventListener:(name,fn)=>{networkEvents[name]=fn}
+};
+const networkNavigator={onLine:false};
+try {
+  new Function('window','document','navigator','setInlineMessage','cloudStatus','cloudMsg','showToast','updateCloudUI', preparedSources[jsFiles.indexOf('network-status.js')])(
+    networkWindow,
+    networkDocument,
+    networkNavigator,
+    (_id,text)=>{networkMessages.weather=text},
+    text=>{networkMessages.status=text},
+    text=>{networkMessages.cloud=text},
+    text=>{networkMessages.toast=text},
+    ()=>{networkMessages.status='ONLINE'}
+  );
+} catch (error) {
+  console.error('KZ network-state runtime smoke test crashed');
+  throw error;
+}
+if (!networkWindow.KZNetworkStatus) throw new Error('Runtime smoke test: KZNetworkStatus API missing');
+if (networkDocument.documentElement.dataset.network!=='offline') throw new Error('Runtime smoke test: offline dataset state missing');
+if (networkMessages.status!=='OFFLINE') throw new Error('Runtime smoke test: cloud offline state missing');
+if (!networkMessages.weather.startsWith('Offline:')) throw new Error('Runtime smoke test: weather offline message missing');
+if (!networkEvents.online||!networkEvents.offline) throw new Error('Runtime smoke test: network listeners missing');
+networkNavigator.onLine=true;
+networkEvents.online();
+if (networkDocument.documentElement.dataset.network!=='online') throw new Error('Runtime smoke test: online dataset state missing');
+console.log('KZ network-state smoke test: explicit offline/online state passed.');
 
 const bootstrap = String.raw`
 (function(){
@@ -249,6 +289,7 @@ if (!app.includes('initComponentDB()')) throw new Error('Smoke test: initCompone
 if (!app.includes("select.id='languageSelect'")) throw new Error('Smoke test: language selector is not bundled');
 if (!app.includes("SUPPORTED=['it','en','es','de']")) throw new Error('Smoke test: IT/EN/ES/DE language set is incomplete');
 if (!app.includes('window.KZI18N')) throw new Error('Smoke test: i18n runtime API is not bundled');
+if (!app.includes('window.KZNetworkStatus')) throw new Error('Smoke test: network status runtime API is not bundled');
 
 await Promise.all([
   writeFile('dist/index.html', html),
@@ -256,4 +297,4 @@ await Promise.all([
   copyFile('sw.js', 'dist/sw.js')
 ]);
 
-console.log('KZ CarbWeather build: syntax, runtime select population, i18n and structural smoke checks passed.');
+console.log('KZ CarbWeather build: syntax, runtime select population, i18n, network state and structural smoke checks passed.');
