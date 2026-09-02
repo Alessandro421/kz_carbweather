@@ -124,3 +124,24 @@ footer{color:var(--muted);font-size:11px;text-align:center;padding:25px 0}
   .installHint{display:block;margin-top:10px;padding:10px 12px;background:#171b20;border-left:3px solid var(--blue);border-radius:8px;font-size:12px;color:#d9e0e7}
 }
 @media(max-width:850px){.headerDataTools{width:100%;margin-left:0;justify-content:flex-start}.headerDataActions{width:100%}.headerDataActions button{flex:1}.toastStack{right:12px;bottom:12px}}
+
+/* Android/PWA standalone: respect display cutouts, gesture areas and edge-to-edge safe zones. */
+@media(max-width:850px){
+  .wrap{
+    padding-top:max(12px,env(safe-area-inset-top));
+    padding-right:max(12px,env(safe-area-inset-right));
+    padding-bottom:max(20px,env(safe-area-inset-bottom));
+    padding-left:max(12px,env(safe-area-inset-left));
+  }
+  .toastStack{
+    right:max(12px,env(safe-area-inset-right));
+    bottom:max(12px,env(safe-area-inset-bottom));
+    width:min(380px,calc(100vw - max(24px,env(safe-area-inset-left)) - max(24px,env(safe-area-inset-right))));
+  }
+  .appModalOverlay{
+    padding-top:max(18px,env(safe-area-inset-top));
+    padding-right:max(18px,env(safe-area-inset-right));
+    padding-bottom:max(18px,env(safe-area-inset-bottom));
+    padding-left:max(18px,env(safe-area-inset-left));
+  }
+}
