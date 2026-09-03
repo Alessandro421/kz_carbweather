@@ -14,7 +14,7 @@ const TRACK_DATABASE = [
   {id:'kart-planet',name:'Kart Planet',city:'Busca',province:'CN',region:'Piemonte',country:'Italia',latitude:44.4954,longitude:7.50357,aliases:['kartplanet','busca kart']},
 
   // LIGURIA
-  {id:'kart-pg-corse',name:'Kart PG Corse',city:'Genova',province:'GE',region:'Liguria',country:'Italia',latitude:null,longitude:null,aliases:['pg corse','genova kart']},
+  {id:'kart-pg-corse',name:'Kart PG Corse',city:'Genova',province:'GE',region:'Liguria',country:'Italia',latitude:44.6047,longitude:8.9519,aliases:['pg corse','genova kart']},
 
   // VENETO
   {id:'pista-azzurra-jesolo',name:'Pista Azzurra',city:'Jesolo',province:'VE',region:'Veneto',country:'Italia',latitude:null,longitude:null,aliases:['pista azzurra jesolo','jesolo kart']},
