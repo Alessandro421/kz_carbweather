@@ -1,0 +1,13 @@
+/* Keyboard accessibility: visible focus without changing the existing visual layout. */
+:where(button,a,summary,input,select,textarea,[tabindex]):focus-visible{
+  outline:3px solid var(--accent,#ffca3a);
+  outline-offset:3px;
+}
+
+:where(button,a,summary,[tabindex]):focus:not(:focus-visible){
+  outline:none;
+}
+
+@media(prefers-reduced-motion:reduce){
+  .appToast{transition:none}
+}
