@@ -120,18 +120,46 @@
     }
   };
 
-  /* GPS: use coordinates for weather, but resolve a human-readable locality for the UI. */
-  window.geoWeather=function(){
+  /* GPS: preserve coordinate-based weather while giving Android/PWA users actionable permission/error context. */
+  const GPS_COPY={
+    it:{unsupported:'GPS non disponibile su questo dispositivo.',reading:'Lettura posizione GPS…',detected:'Posizione rilevata. Identifico la località…',denied:'Accesso alla posizione disattivato. Abilita la posizione per KZ CarbWeather nelle impostazioni del browser/app.',unavailable:'Posizione GPS non disponibile. Verifica che la localizzazione del dispositivo sia attiva.',timeout:'GPS: rilevamento scaduto. Riprova all’aperto o con un segnale migliore.',generic:'Impossibile leggere la posizione GPS. Riprova.'},
+    en:{unsupported:'GPS is not available on this device.',reading:'Reading GPS position…',detected:'Position detected. Identifying location…',denied:'Location access is disabled. Enable location for KZ CarbWeather in the browser/app settings.',unavailable:'GPS position is unavailable. Check that device location is enabled.',timeout:'GPS lookup timed out. Try again outdoors or with a better signal.',generic:'Unable to read GPS position. Try again.'},
+    es:{unsupported:'El GPS no está disponible en este dispositivo.',reading:'Leyendo posición GPS…',detected:'Posición detectada. Identificando ubicación…',denied:'El acceso a la ubicación está desactivado. Activa la ubicación para KZ CarbWeather en los ajustes del navegador/app.',unavailable:'La posición GPS no está disponible. Comprueba que la ubicación del dispositivo esté activada.',timeout:'La búsqueda GPS agotó el tiempo. Inténtalo de nuevo al aire libre o con mejor señal.',generic:'No se puede leer la posición GPS. Inténtalo de nuevo.'},
+    de:{unsupported:'GPS ist auf diesem Gerät nicht verfügbar.',reading:'GPS-Position wird gelesen…',detected:'Position erkannt. Standort wird bestimmt…',denied:'Standortzugriff ist deaktiviert. Aktiviere den Standort für KZ CarbWeather in den Browser-/App-Einstellungen.',unavailable:'GPS-Position ist nicht verfügbar. Prüfe, ob die Standortdienste des Geräts aktiviert sind.',timeout:'GPS-Ortung hat das Zeitlimit erreicht. Versuche es im Freien oder mit besserem Signal erneut.',generic:'GPS-Position kann nicht gelesen werden. Bitte erneut versuchen.'}
+  };
+  const gpsText=key=>{
+    const lang=window.KZI18N?.getLanguage?.()||document.documentElement?.lang||'it';
+    return (GPS_COPY[lang]||GPS_COPY.it)[key]||GPS_COPY.it[key];
+  };
+  const gpsErrorText=error=>{
+    if(error?.code===1)return gpsText('denied');
+    if(error?.code===2)return gpsText('unavailable');
+    if(error?.code===3)return gpsText('timeout');
+    return gpsText('generic');
+  };
+
+  window.geoWeather=async function(){
     clearPlaceResults();
-    if(!navigator.geolocation){setInlineMessage('weatherMsg','GPS non disponibile.',true);return}
-    setInlineMessage('weatherMsg','Lettura posizione GPS…');
+    if(!navigator.geolocation){setInlineMessage('weatherMsg',gpsText('unsupported'),true);return}
+
+    if(navigator.permissions?.query){
+      try{
+        const permission=await navigator.permissions.query({name:'geolocation'});
+        if(permission.state==='denied'){
+          setInlineMessage('weatherMsg',gpsText('denied'),true);
+          return;
+        }
+      }catch{}
+    }
+
+    setInlineMessage('weatherMsg',gpsText('reading'));
     navigator.geolocation.getCurrentPosition(async p=>{
       const lat=p.coords.latitude,lon=p.coords.longitude;
-      setInlineMessage('weatherMsg','Posizione rilevata. Identifico la località…');
+      setInlineMessage('weatherMsg',gpsText('detected'));
       const label=await reverseGpsLabel(lat,lon);
       if($('place'))$('place').value=label;
       await loadWeather(lat,lon,label);
-    },()=>setInlineMessage('weatherMsg','GPS non disponibile/consentito.',true),{enableHighAccuracy:true,timeout:12000,maximumAge:60000});
+    },error=>setInlineMessage('weatherMsg',gpsErrorText(error),true),{enableHighAccuracy:true,timeout:12000,maximumAge:60000});
   };
 
   /* Hosted client uses implicit auth flow. Force signup confirmation back to the production app. */
