@@ -170,6 +170,21 @@ networkEvents.online();
 if (networkDocument.documentElement.dataset.network!=='online') throw new Error('Runtime smoke test: online dataset state missing');
 console.log('KZ network-state smoke test: explicit offline/online state passed.');
 
+/* Build gate 2d: GPS handling must preflight denied permission and distinguish standard geolocation failures. */
+const enhancementSource=preparedSources[jsFiles.indexOf('app-enhancements.js')];
+for (const needle of [
+  "navigator.permissions.query({name:'geolocation'})",
+  "permission.state==='denied'",
+  "error?.code===1",
+  "error?.code===2",
+  "error?.code===3",
+  "GPS lookup timed out",
+  "Standortzugriff ist deaktiviert"
+]) {
+  if (!enhancementSource.includes(needle)) throw new Error(`GPS regression gate missing: ${needle}`);
+}
+console.log('KZ GPS regression gate: permission preflight, error context and multilingual copy passed.');
+
 const bootstrap = String.raw`
 (function(){
   if (window.__kzAppInitialized) return;
@@ -297,4 +312,4 @@ await Promise.all([
   copyFile('sw.js', 'dist/sw.js')
 ]);
 
-console.log('KZ CarbWeather build: syntax, runtime select population, i18n, network state and structural smoke checks passed.');
+console.log('KZ CarbWeather build: syntax, runtime select population, i18n, network state, GPS context and structural smoke checks passed.');
