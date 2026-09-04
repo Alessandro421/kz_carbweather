@@ -17,7 +17,7 @@ const TRACK_DATABASE = [
   {id:'kart-pg-corse',name:'Kart PG Corse',city:'Genova',province:'GE',region:'Liguria',country:'Italia',latitude:44.6047,longitude:8.9519,aliases:['pg corse','genova kart']},
 
   // VENETO
-  {id:'pista-azzurra-jesolo',name:'Pista Azzurra',city:'Jesolo',province:'VE',region:'Veneto',country:'Italia',latitude:null,longitude:null,aliases:['pista azzurra jesolo','jesolo kart']},
+  {id:'pista-azzurra-jesolo',name:'Pista Azzurra',city:'Jesolo',province:'VE',region:'Veneto',country:'Italia',latitude:45.505927,longitude:12.6270266,aliases:['pista azzurra jesolo','jesolo kart']},
 
   // FRIULI VENEZIA GIULIA
   {id:'alberone',name:'Alberone',city:'S. Pietro al Natisone',province:'UD',region:'Friuli Venezia Giulia',country:'Italia',latitude:null,longitude:null,aliases:['alberone kart','san pietro al natisone','s pietro al natisone']},
