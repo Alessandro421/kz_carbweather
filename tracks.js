@@ -26,7 +26,7 @@ const TRACK_DATABASE = [
   {id:'pista-ala',name:'Pista Ala',city:'Ala di Trento',province:'TN',region:'Trentino-Alto Adige',country:'Italia',latitude:45.78593,longitude:11.01237,aliases:['ala','ala kart','ala karting circuit','kartodromo ala','kartodromo di ala']},
 
   // EMILIA-ROMAGNA
-  {id:'pomposa',name:'Pomposa',city:'S. Giuseppe di Comacchio',province:'FE',region:'Emilia-Romagna',country:'Italia',latitude:null,longitude:null,aliases:['pomposa kart','comacchio','san giuseppe di comacchio']},
+  {id:'pomposa',name:'Pomposa',city:'S. Giuseppe di Comacchio',province:'FE',region:'Emilia-Romagna',country:'Italia',latitude:44.71015,longitude:12.21589,aliases:['pomposa kart','comacchio','san giuseppe di comacchio']},
   {id:'rioveggio',name:'Rioveggio',city:'Rioveggio',province:'BO',region:'Emilia-Romagna',country:'Italia',latitude:44.287109,longitude:11.208015,aliases:['pista rioveggio','kartodromo rioveggio','karting rioveggio']},
   {id:'happy-valley',name:'Happy Valley',city:'Cervia',province:'RA',region:'Emilia-Romagna',country:'Italia',latitude:null,longitude:null,aliases:['happy valley kart','cervia kart']},
 
