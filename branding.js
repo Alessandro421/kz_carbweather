@@ -50,10 +50,10 @@
   if (previousJsonExport) window.exportBackupJSON = previousJsonExport;
 
   const COPY={
-    it:{report:'REPORT',subtitle:'REPORT PISTA · METEO + CARBURAZIONE',atmosphere:'CONDIZIONI ATMOSFERICHE',setup:'CARBURAZIONE SUGGERITA',baseline:'BASELINE DI RIFERIMENTO',telemetry:'ULTIMA TELEMETRIA ALFANO',temperature:'Temperatura',humidity:'Umidità',pressure:'Pressione',density:'Densità aria',densityDelta:'Variazione densità',main:'Getto MAX',needle:'Spillo',clip:'Tacca',atom:'Polverizzatore',idle:'Getto minimo',idleB:'Emulsionatore B',air:'Vite aria',slide:'Valvola gas',turns:'giri',baselineWeather:'Meteo baseline',baselineSetup:'Setup baseline',egtMin:'EGT MIN reale',egtMax:'EGT MAX',water:'Acqua',bestLap:'Best lap',generated:'Generato',disclaimer:'Setup suggerito dalla baseline salvata e dalle condizioni atmosferiche del momento. Verifica finale: EGT + comportamento motore in pista.',loadWeather:'Carica il meteo della pista prima di esportare il report.',done:'Report JPEG esportato.'},
-    en:{report:'REPORT',subtitle:'TRACK REPORT · WEATHER + JETTING',atmosphere:'ATMOSPHERIC CONDITIONS',setup:'SUGGESTED JETTING',baseline:'REFERENCE BASELINE',telemetry:'LATEST ALFANO TELEMETRY',temperature:'Temperature',humidity:'Humidity',pressure:'Pressure',density:'Air density',densityDelta:'Density change',main:'Main jet',needle:'Needle',clip:'Clip',atom:'Atomizer',idle:'Idle jet',idleB:'Idle emulsifier B',air:'Air screw',slide:'Throttle slide',turns:'turns',baselineWeather:'Baseline weather',baselineSetup:'Baseline setup',egtMin:'Real EGT MIN',egtMax:'EGT MAX',water:'Water',bestLap:'Best lap',generated:'Generated',disclaimer:'Suggested setup is calculated from the saved baseline and current atmospheric conditions. Final verification: EGT + engine behavior on track.',loadWeather:'Load the track weather before exporting the report.',done:'JPEG report exported.'},
-    es:{report:'REPORT',subtitle:'INFORME DE PISTA · TIEMPO + CARBURACIÓN',atmosphere:'CONDICIONES ATMOSFÉRICAS',setup:'CARBURACIÓN SUGERIDA',baseline:'REFERENCIA BASE',telemetry:'ÚLTIMA TELEMETRÍA ALFANO',temperature:'Temperatura',humidity:'Humedad',pressure:'Presión',density:'Densidad del aire',densityDelta:'Variación de densidad',main:'Chiclé principal',needle:'Aguja',clip:'Clip',atom:'Atomizador',idle:'Chiclé de baja',idleB:'Emulsionador B',air:'Tornillo de aire',slide:'Corredera',turns:'vueltas',baselineWeather:'Tiempo de referencia',baselineSetup:'Setup de referencia',egtMin:'EGT MÍN real',egtMax:'EGT MÁX',water:'Agua',bestLap:'Mejor vuelta',generated:'Generado',disclaimer:'El setup sugerido se calcula desde la referencia guardada y las condiciones atmosféricas actuales. Verificación final: EGT + comportamiento del motor en pista.',loadWeather:'Carga el tiempo del circuito antes de exportar el informe.',done:'Informe JPEG exportado.'},
-    de:{report:'REPORT',subtitle:'STRECKENREPORT · WETTER + VERGASERABSTIMMUNG',atmosphere:'ATMOSPHÄRISCHE BEDINGUNGEN',setup:'EMPFOHLENE VERGASERABSTIMMUNG',baseline:'REFERENZ-BASELINE',telemetry:'LETZTE ALFANO-TELEMETRIE',temperature:'Temperatur',humidity:'Luftfeuchtigkeit',pressure:'Druck',density:'Luftdichte',densityDelta:'Dichteänderung',main:'Hauptdüse',needle:'Nadel',clip:'Clip',atom:'Zerstäuber',idle:'Leerlaufdüse',idleB:'Leerlauf-Emulsionsrohr B',air:'Luftschraube',slide:'Gasschieber',turns:'Umdr.',baselineWeather:'Referenzwetter',baselineSetup:'Referenz-Setup',egtMin:'Reale EGT MIN',egtMax:'EGT MAX',water:'Wasser',bestLap:'Beste Runde',generated:'Erstellt',disclaimer:'Das empfohlene Setup wird aus der gespeicherten Referenz und den aktuellen atmosphärischen Bedingungen berechnet. Endkontrolle: EGT + Motorverhalten auf der Strecke.',loadWeather:'Vor dem Export das Streckenwetter laden.',done:'JPEG-Report exportiert.'}
+    it:{report:'REPORT',subtitle:'REPORT PISTA · METEO + CARBURAZIONE',atmosphere:'CONDIZIONI ATMOSFERICHE',setup:'CARBURAZIONE SUGGERITA',baseline:'BASELINE DI RIFERIMENTO',telemetry:'ULTIMA TELEMETRIA ALFANO',temperature:'Temperatura',humidity:'Umidità',pressure:'Pressione',density:'Densità aria',densityDelta:'Variazione densità',main:'Getto MAX',needle:'Spillo',clip:'Tacca',atom:'Polverizzatore',idle:'Getto minimo',idleB:'Emulsionatore B',air:'Vite aria',slide:'Valvola gas',turns:'giri',baselineWeather:'Meteo baseline',baselineSetup:'Setup baseline',egtMin:'EGT MIN reale',egtMax:'EGT MAX',water:'Acqua',bestLap:'Best lap',generated:'Generato',disclaimer:'Setup suggerito dalla baseline salvata e dalle condizioni atmosferiche del momento. Verifica finale: EGT + comportamento motore in pista.',loadWeather:'Carica il meteo della pista prima di esportare il report.',done:'Report JPEG esportato.',shared:'Report condiviso.'},
+    en:{report:'REPORT',subtitle:'TRACK REPORT · WEATHER + JETTING',atmosphere:'ATMOSPHERIC CONDITIONS',setup:'SUGGESTED JETTING',baseline:'REFERENCE BASELINE',telemetry:'LATEST ALFANO TELEMETRY',temperature:'Temperature',humidity:'Humidity',pressure:'Pressure',density:'Air density',densityDelta:'Density change',main:'Main jet',needle:'Needle',clip:'Clip',atom:'Atomizer',idle:'Idle jet',idleB:'Idle emulsifier B',air:'Air screw',slide:'Throttle slide',turns:'turns',baselineWeather:'Baseline weather',baselineSetup:'Baseline setup',egtMin:'Real EGT MIN',egtMax:'EGT MAX',water:'Water',bestLap:'Best lap',generated:'Generated',disclaimer:'Suggested setup is calculated from the saved baseline and current atmospheric conditions. Final verification: EGT + engine behavior on track.',loadWeather:'Load the track weather before exporting the report.',done:'JPEG report exported.',shared:'Report shared.'},
+    es:{report:'REPORT',subtitle:'INFORME DE PISTA · TIEMPO + CARBURACIÓN',atmosphere:'CONDICIONES ATMOSFÉRICAS',setup:'CARBURACIÓN SUGERIDA',baseline:'REFERENCIA BASE',telemetry:'ÚLTIMA TELEMETRÍA ALFANO',temperature:'Temperatura',humidity:'Humedad',pressure:'Presión',density:'Densidad del aire',densityDelta:'Variación de densidad',main:'Chiclé principal',needle:'Aguja',clip:'Clip',atom:'Atomizador',idle:'Chiclé de baja',idleB:'Emulsionador B',air:'Tornillo de aire',slide:'Corredera',turns:'vueltas',baselineWeather:'Tiempo de referencia',baselineSetup:'Setup de referencia',egtMin:'EGT MÍN real',egtMax:'EGT MÁX',water:'Agua',bestLap:'Mejor vuelta',generated:'Generado',disclaimer:'El setup sugerido se calcula desde la referencia guardada y las condiciones atmosféricas actuales. Verificación final: EGT + comportamiento del motor en pista.',loadWeather:'Carga el tiempo del circuito antes de exportar el informe.',done:'Informe JPEG exportado.',shared:'Informe compartido.'},
+    de:{report:'REPORT',subtitle:'STRECKENREPORT · WETTER + VERGASERABSTIMMUNG',atmosphere:'ATMOSPHÄRISCHE BEDINGUNGEN',setup:'EMPFOHLENE VERGASERABSTIMMUNG',baseline:'REFERENZ-BASELINE',telemetry:'LETZTE ALFANO-TELEMETRIE',temperature:'Temperatur',humidity:'Luftfeuchtigkeit',pressure:'Druck',density:'Luftdichte',densityDelta:'Dichteänderung',main:'Hauptdüse',needle:'Nadel',clip:'Clip',atom:'Zerstäuber',idle:'Leerlaufdüse',idleB:'Leerlauf-Emulsionsrohr B',air:'Luftschraube',slide:'Gasschieber',turns:'Umdr.',baselineWeather:'Referenzwetter',baselineSetup:'Referenz-Setup',egtMin:'Reale EGT MIN',egtMax:'EGT MAX',water:'Wasser',bestLap:'Beste Runde',generated:'Erstellt',disclaimer:'Das empfohlene Setup wird aus der gespeicherten Referenz und den aktuellen atmosphärischen Bedingungen berechnet. Endkontrolle: EGT + Motorverhalten auf der Strecke.',loadWeather:'Vor dem Export das Streckenwetter laden.',done:'JPEG-Report exportiert.',shared:'Report geteilt.'}
   };
 
   const lang=()=>{
@@ -155,9 +155,27 @@
 
     const stamp=now.toISOString().slice(0,16).replace(/[:T]/g,'-');
     const filename=`KZ-CarbWeather-${clean(currentWeather.label||val('logPlace'))}-${stamp}.jpg`;
-    canvas.toBlob(blob=>{
+    canvas.toBlob(async blob=>{
       if(!blob){showToast('JPEG export error','error');return}
-      const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1200);showToast(t('done'),'success');
+      const download=()=>{
+        const a=document.createElement('a');
+        a.href=URL.createObjectURL(blob);
+        a.download=filename;
+        a.click();
+        setTimeout(()=>URL.revokeObjectURL(a.href),1200);
+        showToast(t('done'),'success');
+      };
+      try{
+        const file=new File([blob],filename,{type:'image/jpeg'});
+        if(navigator.share&&navigator.canShare?.({files:[file]})){
+          await navigator.share({files:[file],title:'KZ CarbWeather',text:t('subtitle')});
+          showToast(t('shared'),'success');
+          return;
+        }
+      }catch(error){
+        if(error?.name==='AbortError')return;
+      }
+      download();
     },'image/jpeg',0.94);
   }
 
