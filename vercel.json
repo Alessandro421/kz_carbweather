@@ -1,5 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "node build.mjs && node pwa-assets.mjs && node tests/safe-area.test.mjs && node tests/accessibility-focus.test.mjs",
+  "buildCommand": "node build.mjs && node pwa-assets.mjs && node tests/safe-area.test.mjs && node tests/accessibility-focus.test.mjs && node tests/web-share.test.mjs",
   "outputDirectory": "dist"
 }
