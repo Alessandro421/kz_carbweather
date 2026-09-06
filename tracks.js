@@ -28,7 +28,7 @@ const TRACK_DATABASE = [
   // EMILIA-ROMAGNA
   {id:'pomposa',name:'Pomposa',city:'S. Giuseppe di Comacchio',province:'FE',region:'Emilia-Romagna',country:'Italia',latitude:44.71015,longitude:12.21589,aliases:['pomposa kart','comacchio','san giuseppe di comacchio']},
   {id:'rioveggio',name:'Rioveggio',city:'Rioveggio',province:'BO',region:'Emilia-Romagna',country:'Italia',latitude:44.287109,longitude:11.208015,aliases:['pista rioveggio','kartodromo rioveggio','karting rioveggio']},
-  {id:'happy-valley',name:'Happy Valley',city:'Cervia',province:'RA',region:'Emilia-Romagna',country:'Italia',latitude:null,longitude:null,aliases:['happy valley kart','cervia kart']},
+  {id:'happy-valley',name:'Happy Valley',city:'Cervia',province:'RA',region:'Emilia-Romagna',country:'Italia',latitude:44.2381,longitude:12.35524,aliases:['happy valley kart','cervia kart']},
 
   // TOSCANA
   {id:'pista-del-mare',name:'Pista del Mare',city:'Cecina',province:'LI',region:'Toscana',country:'Italia',latitude:43.284492,longitude:10.522563,aliases:['pista del mare','cecina','kartodromo cecina','paduletto','pista del mare cecina']},
