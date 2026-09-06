@@ -23,6 +23,57 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 <!--KZ_JS-->
+
+/* App-grade backup restore guard. Keeps local import deterministic and leaves cloud/calculation logic untouched. */
+(function(){
+  const BACKUP_MAX_BYTES=2*1024*1024;
+  const BASELINE_KEYS=['bTemp','bPress','bRh','bMain','bNeedle','bClip','bAtom','bIdle','bIdleB','bAir','bSlide'];
+  const TEST_KEYS=['tMain','tNeedle','tClip','tAtom','tIdle','tIdleB','tAir','tSlide'];
+  const isPlainObject=value=>!!value&&typeof value==='object'&&!Array.isArray(value)&&Object.getPrototypeOf(value)===Object.prototype;
+  const cleanSetup=(source,allowed)=>allowed.reduce((out,key)=>{
+    const value=source[key];
+    if(typeof value==='string'||typeof value==='number')out[key]=String(value);
+    return out;
+  },{});
+  const validateBackup=parsed=>{
+    if(!isPlainObject(parsed)||parsed.schema!=='kz-carbweather-backup'||parsed.version!==1)throw Error('Backup non riconosciuto o versione non supportata.');
+    if(!isPlainObject(parsed.baseline)||!isPlainObject(parsed.testSetup)||!Array.isArray(parsed.trackLogs))throw Error('Backup incompleto o danneggiato.');
+    if(parsed.trackLogs.length>5000)throw Error('Backup troppo grande: numero sessioni non valido.');
+    const baseline=cleanSetup(parsed.baseline,BASELINE_KEYS),testSetup=cleanSetup(parsed.testSetup,TEST_KEYS);
+    if(!Object.keys(baseline).length||!Object.keys(testSetup).length)throw Error('Backup privo dei dati di setup richiesti.');
+    return {baseline,testSetup,trackLogs:parsed.trackLogs};
+  };
+
+  window.importAllDataFile=async function(file){
+    if(!file)return;
+    const input=document.getElementById('backupImportFile');
+    try{
+      if(Number.isFinite(file.size)&&file.size>BACKUP_MAX_BYTES)throw Error('File troppo grande. Seleziona un backup JSON KZ CarbWeather valido.');
+      const text=await file.text();
+      if(text.length>BACKUP_MAX_BYTES)throw Error('File troppo grande.');
+      const safe=validateBackup(JSON.parse(text));
+      const baselineJSON=JSON.stringify(safe.baseline),logsJSON=JSON.stringify(safe.trackLogs);
+      const oldBaseline=localStorage.getItem('cw_baseline'),oldLogs=localStorage.getItem('cw_logs');
+      try{
+        localStorage.setItem('cw_baseline',baselineJSON);
+        localStorage.setItem('cw_logs',logsJSON);
+      }catch(storageError){
+        if(oldBaseline===null)localStorage.removeItem('cw_baseline');else localStorage.setItem('cw_baseline',oldBaseline);
+        if(oldLogs===null)localStorage.removeItem('cw_logs');else localStorage.setItem('cw_logs',oldLogs);
+        throw Error('Spazio locale insufficiente: il backup precedente è stato mantenuto.');
+      }
+      Object.entries(safe.baseline).forEach(([key,value])=>{const el=document.getElementById(key);if(el)el.value=value});
+      Object.entries(safe.testSetup).forEach(([key,value])=>{const el=document.getElementById(key);if(el)el.value=value});
+      loadNeedleGeometry('b');loadNeedleGeometry('t');renderLogs();calcCorrection();compareSetup();updateMobileHero();
+      showToast('Backup ripristinato nel browser.','success');
+    }catch(error){
+      showToast(`Import non riuscito: ${error.message}`,'error',4600);
+    }finally{
+      if(input)input.value='';
+    }
+  };
+  window.KZBackupImportGuard={validateBackup,maxBytes:BACKUP_MAX_BYTES};
+})();
 </script>
 </body>
 </html>
