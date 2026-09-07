@@ -20,7 +20,7 @@ const TRACK_DATABASE = [
   {id:'pista-azzurra-jesolo',name:'Pista Azzurra',city:'Jesolo',province:'VE',region:'Veneto',country:'Italia',latitude:45.505927,longitude:12.6270266,aliases:['pista azzurra jesolo','jesolo kart']},
 
   // FRIULI VENEZIA GIULIA
-  {id:'alberone',name:'Alberone',city:'S. Pietro al Natisone',province:'UD',region:'Friuli Venezia Giulia',country:'Italia',latitude:null,longitude:null,aliases:['alberone kart','san pietro al natisone','s pietro al natisone']},
+  {id:'alberone',name:'Alberone',city:'S. Pietro al Natisone',province:'UD',region:'Friuli Venezia Giulia',country:'Italia',latitude:46.13489,longitude:13.50524,aliases:['alberone kart','san pietro al natisone','s pietro al natisone']},
 
   // TRENTINO ALTO ADIGE
   {id:'pista-ala',name:'Pista Ala',city:'Ala di Trento',province:'TN',region:'Trentino-Alto Adige',country:'Italia',latitude:45.78593,longitude:11.01237,aliases:['ala','ala kart','ala karting circuit','kartodromo ala','kartodromo di ala']},
