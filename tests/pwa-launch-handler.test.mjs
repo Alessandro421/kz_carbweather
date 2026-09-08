@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises';
 
 const manifest = JSON.parse(await readFile('manifest.webmanifest', 'utf8'));
+const serviceWorker = await readFile('sw.js', 'utf8');
 
 if (manifest.display !== 'standalone') {
   throw new Error(`PWA launch regression: display=${manifest.display}, expected standalone`);
@@ -12,4 +13,16 @@ if (manifest.start_url !== './' || manifest.scope !== './') {
   throw new Error('PWA launch regression: start_url/scope changed unexpectedly');
 }
 
-console.log('KZ PWA launch regression: standalone launch reuses the existing app client.');
+for (const needle of [
+  'self.registration.navigationPreload',
+  'await self.registration.navigationPreload.enable()',
+  "e.request.mode==='navigate'",
+  'e.preloadResponse.then(r=>r||fetch(e.request))',
+  "if(e.request.mode==='navigate')return caches.match('./index.html')"
+]) {
+  if (!serviceWorker.includes(needle)) {
+    throw new Error(`PWA navigation preload regression: missing ${needle}`);
+  }
+}
+
+console.log('KZ PWA launch regression: standalone launch and navigation preload checks passed.');
