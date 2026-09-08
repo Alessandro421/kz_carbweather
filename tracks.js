@@ -32,12 +32,11 @@ const TRACK_DATABASE = [
 
   // TOSCANA
   {id:'pista-del-mare',name:'Pista del Mare',city:'Cecina',province:'LI',region:'Toscana',country:'Italia',latitude:43.284492,longitude:10.522563,aliases:['pista del mare','cecina','kartodromo cecina','paduletto','pista del mare cecina']},
-  {id:'val-di-biena',name:'Val di Biena',city:'Castelnuovo Berardenga',province:'SI',region:'Toscana',country:'Italia',latitude:null,longitude:null,aliases:['val di biena kart','castelnuovo berardenga']},
+  {id:'val-di-biena',name:'Val di Biena',city:'Castelnuovo Berardenga',province:'SI',region:'Toscana',country:'Italia',latitude:43.308507,longitude:11.473652,aliases:['val di biena kart','castelnuovo berardenga']},
   {id:'circuito-arezzo',name:'Circ. Arezzo',city:'Arezzo',province:'AR',region:'Toscana',country:'Italia',latitude:null,longitude:null,aliases:['circuito arezzo','kart arezzo','arezzo kart']},
 
   // MARCHE
   {id:'cogiskart',name:'Cogiskart',city:'Corridonia',province:'MC',region:'Marche',country:'Italia',latitude:null,longitude:null,aliases:['cogis kart','corridonia kart']},
-
   // ABRUZZO
   {id:'adriatico',name:'Adriatico',city:'Cappelle sul Tavo',province:'PE',region:'Abruzzo',country:'Italia',latitude:null,longitude:null,aliases:['adriatico kart','cappelle sul tavo']},
   {id:'internazionale-d-abruzzo',name:"Internazionale d'Abruzzo",city:'Ortona',province:'CH',region:'Abruzzo',country:'Italia',latitude:null,longitude:null,aliases:['internazionale abruzzo','kartodromo ortona','ortona kart']},
