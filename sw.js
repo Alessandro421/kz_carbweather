@@ -1,4 +1,4 @@
-const CACHE='kz-carbweather-v2.0-appshell';
+const CACHE='kz-carbweather-v2.1-appshell';
 const ASSETS=[
   './',
   './index.html',
@@ -13,11 +13,14 @@ self.addEventListener('install',e=>{
 });
 
 self.addEventListener('activate',e=>{
-  e.waitUntil(
-    caches.keys()
-      .then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))))
-      .then(()=>self.clients.claim())
-  );
+  e.waitUntil((async()=>{
+    if(self.registration.navigationPreload){
+      await self.registration.navigationPreload.enable();
+    }
+    const keys=await caches.keys();
+    await Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)));
+    await self.clients.claim();
+  })());
 });
 
 self.addEventListener('fetch',e=>{
@@ -26,8 +29,12 @@ self.addEventListener('fetch',e=>{
   const url=new URL(e.request.url);
   if(url.origin!==self.location.origin)return;
 
+  const networkResponse=e.request.mode==='navigate'
+    ? e.preloadResponse.then(r=>r||fetch(e.request))
+    : fetch(e.request);
+
   e.respondWith(
-    fetch(e.request)
+    networkResponse
       .then(r=>{
         if(r.ok){
           const copy=r.clone();
