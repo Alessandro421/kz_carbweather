@@ -25,4 +25,13 @@ for (const needle of [
   }
 }
 
-console.log('KZ PWA launch regression: standalone launch and navigation preload checks passed.');
+const preloadEnable = serviceWorker.indexOf('await self.registration.navigationPreload.enable()');
+const preloadTry = serviceWorker.lastIndexOf('try{', preloadEnable);
+const preloadCatch = serviceWorker.indexOf('}catch(error){', preloadEnable);
+const cacheCleanup = serviceWorker.indexOf('const keys=await caches.keys()', preloadEnable);
+const clientsClaim = serviceWorker.indexOf('await self.clients.claim()', preloadEnable);
+if (preloadTry < 0 || preloadCatch < preloadEnable || cacheCleanup < preloadCatch || clientsClaim < cacheCleanup) {
+  throw new Error('PWA navigation preload resilience regression: preload errors must not block activation cleanup or clients.claim()');
+}
+
+console.log('KZ PWA launch regression: standalone launch, navigation preload and activation resilience checks passed.');
