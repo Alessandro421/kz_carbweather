@@ -15,7 +15,11 @@ self.addEventListener('install',e=>{
 self.addEventListener('activate',e=>{
   e.waitUntil((async()=>{
     if(self.registration.navigationPreload){
-      await self.registration.navigationPreload.enable();
+      try{
+        await self.registration.navigationPreload.enable();
+      }catch(error){
+        console.warn('Navigation preload unavailable; continuing service worker activation.',error);
+      }
     }
     const keys=await caches.keys();
     await Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)));
