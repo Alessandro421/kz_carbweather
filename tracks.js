@@ -36,7 +36,7 @@ const TRACK_DATABASE = [
   {id:'circuito-arezzo',name:'Circ. Arezzo',city:'Arezzo',province:'AR',region:'Toscana',country:'Italia',latitude:43.40394,longitude:11.84525,aliases:['circuito arezzo','kart arezzo','arezzo kart']},
 
   // MARCHE
-  {id:'cogiskart',name:'Cogiskart',city:'Corridonia',province:'MC',region:'Marche',country:'Italia',latitude:null,longitude:null,aliases:['cogis kart','corridonia kart']},
+  {id:'cogiskart',name:'Cogiskart',city:'Corridonia',province:'MC',region:'Marche',country:'Italia',latitude:43.25949,longitude:13.50485,aliases:['cogis kart','corridonia kart']},
   // ABRUZZO
   {id:'adriatico',name:'Adriatico',city:'Cappelle sul Tavo',province:'PE',region:'Abruzzo',country:'Italia',latitude:null,longitude:null,aliases:['adriatico kart','cappelle sul tavo']},
   {id:'internazionale-d-abruzzo',name:"Internazionale d'Abruzzo",city:'Ortona',province:'CH',region:'Abruzzo',country:'Italia',latitude:null,longitude:null,aliases:['internazionale abruzzo','kartodromo ortona','ortona kart']},
