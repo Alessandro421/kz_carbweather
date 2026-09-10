@@ -2,6 +2,7 @@ import { readFile } from 'node:fs/promises';
 
 const manifest = JSON.parse(await readFile('manifest.webmanifest', 'utf8'));
 const serviceWorker = await readFile('sw.js', 'utf8');
+const indexHtml = await readFile('index.html', 'utf8');
 
 if (manifest.display !== 'standalone') {
   throw new Error(`PWA launch regression: display=${manifest.display}, expected standalone`);
@@ -11,6 +12,9 @@ if (!manifest.launch_handler || manifest.launch_handler.client_mode !== 'navigat
 }
 if (manifest.start_url !== './' || manifest.scope !== './') {
   throw new Error('PWA launch regression: start_url/scope changed unexpectedly');
+}
+if (!indexHtml.includes('<meta name="mobile-web-app-capable" content="yes">')) {
+  throw new Error('PWA launch regression: Android mobile-web-app-capable metadata missing');
 }
 
 for (const needle of [
@@ -34,4 +38,4 @@ if (preloadTry < 0 || preloadCatch < preloadEnable || cacheCleanup < preloadCatc
   throw new Error('PWA navigation preload resilience regression: preload errors must not block activation cleanup or clients.claim()');
 }
 
-console.log('KZ PWA launch regression: standalone launch, navigation preload and activation resilience checks passed.');
+console.log('KZ PWA launch regression: standalone launch, Android app metadata, navigation preload and activation resilience checks passed.');
