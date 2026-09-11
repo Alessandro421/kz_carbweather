@@ -38,4 +38,11 @@ if (preloadTry < 0 || preloadCatch < preloadEnable || cacheCleanup < preloadCatc
   throw new Error('PWA navigation preload resilience regression: preload errors must not block activation cleanup or clients.claim()');
 }
 
-console.log('KZ PWA launch regression: standalone launch, Android app metadata, navigation preload and activation resilience checks passed.');
+if (!serviceWorker.includes("const CACHE_PREFIX='kz-carbweather-';")) {
+  throw new Error('PWA cache cleanup regression: app-owned cache prefix is missing');
+}
+if (!serviceWorker.includes('keys.filter(k=>k.startsWith(CACHE_PREFIX)&&k!==CACHE)')) {
+  throw new Error('PWA cache cleanup regression: activation must delete only stale KZ CarbWeather caches');
+}
+
+console.log('KZ PWA launch regression: standalone launch, Android app metadata, navigation preload, activation resilience and scoped cache cleanup checks passed.');
