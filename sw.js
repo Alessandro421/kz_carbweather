@@ -1,3 +1,4 @@
+const CACHE_PREFIX='kz-carbweather-';
 const CACHE='kz-carbweather-v2.1-appshell';
 const ASSETS=[
   './',
@@ -22,7 +23,7 @@ self.addEventListener('activate',e=>{
       }
     }
     const keys=await caches.keys();
-    await Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)));
+    await Promise.all(keys.filter(k=>k.startsWith(CACHE_PREFIX)&&k!==CACHE).map(k=>caches.delete(k)));
     await self.clients.claim();
   })());
 });
