@@ -16,6 +16,10 @@ if (manifest.start_url !== './' || manifest.scope !== './') {
 if (!indexHtml.includes('<meta name="mobile-web-app-capable" content="yes">')) {
   throw new Error('PWA launch regression: Android mobile-web-app-capable metadata missing');
 }
+const htmlTheme = indexHtml.match(/<meta name="theme-color" content="([^"]+)">/)?.[1];
+if (!htmlTheme || manifest.theme_color !== htmlTheme) {
+  throw new Error(`PWA theme regression: manifest theme_color=${manifest.theme_color}, HTML theme-color=${htmlTheme || 'missing'}`);
+}
 
 for (const needle of [
   'self.registration.navigationPreload',
@@ -45,4 +49,4 @@ if (!serviceWorker.includes('keys.filter(k=>k.startsWith(CACHE_PREFIX)&&k!==CACH
   throw new Error('PWA cache cleanup regression: activation must delete only stale KZ CarbWeather caches');
 }
 
-console.log('KZ PWA launch regression: standalone launch, Android app metadata, navigation preload, activation resilience and scoped cache cleanup checks passed.');
+console.log('KZ PWA launch regression: standalone launch, Android app metadata, aligned theme color, navigation preload, activation resilience and scoped cache cleanup checks passed.');
