@@ -10,7 +10,7 @@
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#0c0f12",
-  "theme_color": "#101317",
+  "theme_color": "#050607",
   "categories": ["sports", "utilities"],
   "launch_handler": {
     "client_mode": "navigate-existing"
