@@ -39,7 +39,7 @@ const TRACK_DATABASE = [
   {id:'cogiskart',name:'Cogiskart',city:'Corridonia',province:'MC',region:'Marche',country:'Italia',latitude:43.25949,longitude:13.50485,aliases:['cogis kart','corridonia kart']},
   // ABRUZZO
   {id:'adriatico',name:'Adriatico',city:'Cappelle sul Tavo',province:'PE',region:'Abruzzo',country:'Italia',latitude:42.469917,longitude:14.091455,aliases:['adriatico kart','cappelle sul tavo']},
-  {id:'internazionale-d-abruzzo',name:"Internazionale d'Abruzzo",city:'Ortona',province:'CH',region:'Abruzzo',country:'Italia',latitude:null,longitude:null,aliases:['internazionale abruzzo','kartodromo ortona','ortona kart']},
+  {id:'internazionale-d-abruzzo',name:"Internazionale d'Abruzzo",city:'Ortona',province:'CH',region:'Abruzzo',country:'Italia',latitude:42.30514,longitude:14.38037,aliases:['internazionale abruzzo','kartodromo ortona','ortona kart']},
   {id:'val-vibrata',name:'Val Vibrata',city:'S. Egidio alla Vibrata',province:'TE',region:'Abruzzo',country:'Italia',latitude:42.810000,longitude:13.686667,aliases:['kartodromo val vibrata','sant egidio alla vibrata','santegidio alla vibrata','faraone']},
 
   // UMBRIA
