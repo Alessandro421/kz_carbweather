@@ -48,9 +48,10 @@ self.addEventListener('fetch',e=>{
         return r;
       })
       .catch(async()=>{
-        const cached=await caches.match(e.request);
+        const cache=await caches.open(CACHE);
+        const cached=await cache.match(e.request);
         if(cached)return cached;
-        if(e.request.mode==='navigate')return caches.match('./index.html');
+        if(e.request.mode==='navigate')return cache.match('./index.html');
         return Response.error();
       })
   );
