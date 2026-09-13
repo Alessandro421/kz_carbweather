@@ -43,7 +43,7 @@ const TRACK_DATABASE = [
   {id:'val-vibrata',name:'Val Vibrata',city:'S. Egidio alla Vibrata',province:'TE',region:'Abruzzo',country:'Italia',latitude:42.810000,longitude:13.686667,aliases:['kartodromo val vibrata','sant egidio alla vibrata','santegidio alla vibrata','faraone']},
 
   // UMBRIA
-  {id:'kartodromo-arcobaleno',name:'Kartodromo Arcobaleno',city:'Trevi',province:'PG',region:'Umbria',country:'Italia',latitude:null,longitude:null,aliases:['arcobaleno kart','trevi kart']},
+  {id:'kartodromo-arcobaleno',name:'Kartodromo Arcobaleno',city:'Trevi',province:'PG',region:'Umbria',country:'Italia',latitude:42.84895,longitude:12.71059,aliases:['arcobaleno kart','trevi kart']},
 
   // LAZIO
   {id:'valle-del-liri',name:'Valle del Liri',city:'Arce',province:'FR',region:'Lazio',country:'Italia',latitude:null,longitude:null,aliases:['valle liri kart','arce kart']},
