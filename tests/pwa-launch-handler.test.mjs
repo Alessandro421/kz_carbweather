@@ -26,7 +26,8 @@ for (const needle of [
   'await self.registration.navigationPreload.enable()',
   "e.request.mode==='navigate'",
   'e.preloadResponse.then(r=>r||fetch(e.request))',
-  "if(e.request.mode==='navigate')return caches.match('./index.html')"
+  'const cache=await caches.open(CACHE)',
+  "if(e.request.mode==='navigate')return cache.match('./index.html')"
 ]) {
   if (!serviceWorker.includes(needle)) {
     throw new Error(`PWA navigation preload regression: missing ${needle}`);
@@ -48,5 +49,11 @@ if (!serviceWorker.includes("const CACHE_PREFIX='kz-carbweather-';")) {
 if (!serviceWorker.includes('keys.filter(k=>k.startsWith(CACHE_PREFIX)&&k!==CACHE)')) {
   throw new Error('PWA cache cleanup regression: activation must delete only stale KZ CarbWeather caches');
 }
+if (serviceWorker.includes('caches.match(e.request)')) {
+  throw new Error('PWA offline cache regression: fetch fallback must not search unrelated origin caches');
+}
+if (!serviceWorker.includes('const cache=await caches.open(CACHE)') || !serviceWorker.includes('const cached=await cache.match(e.request)')) {
+  throw new Error('PWA offline cache regression: fetch fallback must read only from the active KZ CarbWeather cache');
+}
 
-console.log('KZ PWA launch regression: standalone launch, Android app metadata, aligned theme color, navigation preload, activation resilience and scoped cache cleanup checks passed.');
+console.log('KZ PWA launch regression: standalone launch, Android app metadata, aligned theme color, navigation preload, activation resilience, scoped cleanup and scoped offline-cache checks passed.');
