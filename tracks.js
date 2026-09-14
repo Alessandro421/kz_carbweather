@@ -49,7 +49,7 @@ const TRACK_DATABASE = [
   {id:'valle-del-liri',name:'Valle del Liri',city:'Arce',province:'FR',region:'Lazio',country:'Italia',latitude:null,longitude:null,aliases:['valle liri kart','arce kart']},
   {id:'race-kart-aprilia',name:'Race Kart',city:'Aprilia',province:'LT',region:'Lazio',country:'Italia',latitude:null,longitude:null,aliases:['race kart aprilia','aprilia kart']},
   {id:'la-mola',name:'La Mola',city:'Rieti',province:'RI',region:'Lazio',country:'Italia',latitude:null,longitude:null,aliases:['la mola kart','rieti kart']},
-  {id:'circuito-internazionale-viterbo',name:'Circuito Int. Viterbo',city:'Viterbo',province:'VT',region:'Lazio',country:'Italia',latitude:null,longitude:null,aliases:['circuito internazionale viterbo','viterbo kart']},
+  {id:'circuito-internazionale-viterbo',name:'Circuito Int. Viterbo',city:'Viterbo',province:'VT',region:'Lazio',country:'Italia',latitude:42.484722,longitude:12.068333,aliases:['circuito internazionale viterbo','viterbo kart']},
   {id:'valle-del-pantano',name:'Pista Valle del Pantano',city:'Artena',province:'RM',region:'Lazio',country:'Italia',latitude:null,longitude:null,aliases:['valle del pantano','artena kart']},
 
   // MOLISE
