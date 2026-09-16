@@ -46,7 +46,7 @@ const TRACK_DATABASE = [
   {id:'kartodromo-arcobaleno',name:'Kartodromo Arcobaleno',city:'Trevi',province:'PG',region:'Umbria',country:'Italia',latitude:42.84895,longitude:12.71059,aliases:['arcobaleno kart','trevi kart']},
 
   // LAZIO
-  {id:'valle-del-liri',name:'Valle del Liri',city:'Arce',province:'FR',region:'Lazio',country:'Italia',latitude:null,longitude:null,aliases:['valle liri kart','arce kart']},
+  {id:'valle-del-liri',name:'Valle del Liri',city:'Arce',province:'FR',region:'Lazio',country:'Italia',latitude:41.5877,longitude:13.5754,aliases:['valle liri kart','arce kart']},
   {id:'race-kart-aprilia',name:'Race Kart',city:'Aprilia',province:'LT',region:'Lazio',country:'Italia',latitude:null,longitude:null,aliases:['race kart aprilia','aprilia kart']},
   {id:'la-mola',name:'La Mola',city:'Rieti',province:'RI',region:'Lazio',country:'Italia',latitude:null,longitude:null,aliases:['la mola kart','rieti kart']},
   {id:'circuito-internazionale-viterbo',name:'Circuito Int. Viterbo',city:'Viterbo',province:'VT',region:'Lazio',country:'Italia',latitude:42.484722,longitude:12.068333,aliases:['circuito internazionale viterbo','viterbo kart']},
