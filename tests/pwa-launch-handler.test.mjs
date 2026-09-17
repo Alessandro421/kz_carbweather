@@ -27,7 +27,7 @@ for (const needle of [
   "e.request.mode==='navigate'",
   'e.preloadResponse.then(r=>r||fetch(e.request))',
   'const cache=await caches.open(CACHE)',
-  "if(e.request.mode==='navigate')return cache.match('./index.html')"
+  "if(isNavigation)return cache.match('./index.html')"
 ]) {
   if (!serviceWorker.includes(needle)) {
     throw new Error(`PWA navigation preload regression: missing ${needle}`);
