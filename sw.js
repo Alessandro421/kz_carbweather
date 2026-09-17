@@ -1,5 +1,5 @@
 const CACHE_PREFIX='kz-carbweather-';
-const CACHE='kz-carbweather-v2.1-appshell';
+const CACHE='kz-carbweather-v2.2-appshell';
 const ASSETS=[
   './',
   './index.html',
@@ -34,7 +34,8 @@ self.addEventListener('fetch',e=>{
   const url=new URL(e.request.url);
   if(url.origin!==self.location.origin)return;
 
-  const networkResponse=e.request.mode==='navigate'
+  const isNavigation=e.request.mode==='navigate';
+  const networkResponse=isNavigation
     ? e.preloadResponse.then(r=>r||fetch(e.request))
     : fetch(e.request);
 
@@ -43,15 +44,15 @@ self.addEventListener('fetch',e=>{
       .then(r=>{
         if(r.ok){
           const copy=r.clone();
-          e.waitUntil(caches.open(CACHE).then(c=>c.put(e.request,copy)));
+          e.waitUntil(caches.open(CACHE).then(c=>c.put(isNavigation?'./index.html':e.request,copy)));
         }
         return r;
       })
       .catch(async()=>{
         const cache=await caches.open(CACHE);
+        if(isNavigation)return cache.match('./index.html');
         const cached=await cache.match(e.request);
         if(cached)return cached;
-        if(e.request.mode==='navigate')return cache.match('./index.html');
         return Response.error();
       })
   );
