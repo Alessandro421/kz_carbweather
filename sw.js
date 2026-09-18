@@ -1,5 +1,5 @@
 const CACHE_PREFIX='kz-carbweather-';
-const CACHE='kz-carbweather-v2.2-appshell';
+const CACHE='kz-carbweather-v2.3-appshell';
 const ASSETS=[
   './',
   './index.html',
@@ -36,7 +36,7 @@ self.addEventListener('fetch',e=>{
 
   const isNavigation=e.request.mode==='navigate';
   const networkResponse=isNavigation
-    ? e.preloadResponse.then(r=>r||fetch(e.request))
+    ? e.preloadResponse.catch(()=>undefined).then(r=>r||fetch(e.request))
     : fetch(e.request);
 
   e.respondWith(
