@@ -25,7 +25,7 @@ for (const needle of [
   'self.registration.navigationPreload',
   'await self.registration.navigationPreload.enable()',
   "e.request.mode==='navigate'",
-  'e.preloadResponse.then(r=>r||fetch(e.request))',
+  'e.preloadResponse.catch(()=>undefined).then(r=>r||fetch(e.request))',
   'const cache=await caches.open(CACHE)',
   "if(isNavigation)return cache.match('./index.html')"
 ]) {
@@ -56,4 +56,4 @@ if (!serviceWorker.includes('const cache=await caches.open(CACHE)') || !serviceW
   throw new Error('PWA offline cache regression: fetch fallback must read only from the active KZ CarbWeather cache');
 }
 
-console.log('KZ PWA launch regression: standalone launch, Android app metadata, aligned theme color, navigation preload, activation resilience, scoped cleanup and scoped offline-cache checks passed.');
+console.log('KZ PWA launch regression: standalone launch, Android app metadata, aligned theme color, navigation preload recovery, activation resilience, scoped cleanup and scoped offline-cache checks passed.');
