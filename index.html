@@ -28,6 +28,16 @@
 <script>
 <!--KZ_JS-->
 
+/* App-grade accessibility: announce dynamic weather/GPS/network feedback without changing the visual UI. */
+(function(){
+  const status=document.getElementById('weatherMsg');
+  if(status){
+    status.setAttribute('role','status');
+    status.setAttribute('aria-live','polite');
+    status.setAttribute('aria-atomic','true');
+  }
+})();
+
 /* App-grade backup restore guard. Keeps local import deterministic and leaves cloud/calculation logic untouched. */
 (function(){
   const BACKUP_MAX_BYTES=2*1024*1024;
