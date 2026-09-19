@@ -1,6 +1,7 @@
 const tests = [
   './safe-area.test.mjs',
   './accessibility-focus.test.mjs',
+  './live-status-accessibility.test.mjs',
   './web-share.test.mjs',
   './backup-import.test.mjs',
   './pwa-launch-handler.test.mjs',
