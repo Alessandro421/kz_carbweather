@@ -7,7 +7,8 @@ const tests = [
   './pwa-launch-handler.test.mjs',
   './touch-ergonomics.test.mjs',
   './color-scheme.test.mjs',
-  './sw-navigation-cache.test.mjs'
+  './sw-navigation-cache.test.mjs',
+  './standalone-overscroll.test.mjs'
 ];
 for (const test of tests) await import(test);
 console.log(`KZ regression suite: ${tests.length} tests passed.`);
