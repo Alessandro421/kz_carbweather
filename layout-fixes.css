@@ -6,6 +6,11 @@
 .mobileHero,.mobileHero *{box-sizing:border-box;min-width:0}
 button,a,[role="button"],input,select,textarea{touch-action:manipulation}
 
+/* Installed PWA: prevent accidental browser-style pull-to-refresh/bounce while preserving normal page scrolling. */
+@media(display-mode:standalone){
+  html,body{overscroll-behavior-y:none}
+}
+
 @media(min-width:1350px){
   .grid{padding-right:302px}
   .mobileHero{
