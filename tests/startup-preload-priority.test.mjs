@@ -9,4 +9,10 @@ for (const preload of preloads) {
 }
 assert.ok(preloads.some(tag => tag.includes('jszip@3.10.1/dist/jszip.min.js')), 'JSZip preload missing');
 assert.ok(preloads.some(tag => tag.includes('@supabase/supabase-js@2')), 'Supabase preload missing');
-console.log('KZ startup preload priority regression passed.');
+
+const startupScripts = [...html.matchAll(/<script\s+src="https:\/\/cdn\.jsdelivr\.net\/npm\/(?:jszip@3\.10\.1\/dist\/jszip\.min\.js|@supabase\/supabase-js@2)"[^>]*><\/script>/g)].map(match => match[0]);
+assert.equal(startupScripts.length, 2, 'expected both startup dependency script tags');
+for (const script of startupScripts) {
+  assert.match(script, /fetchpriority="high"/, 'startup dependency script must retain high fetch priority');
+}
+console.log('KZ startup preload/script priority regression passed.');
