@@ -53,7 +53,7 @@ const TRACK_DATABASE = [
   {id:'valle-del-pantano',name:'Pista Valle del Pantano',city:'Artena',province:'RM',region:'Lazio',country:'Italia',latitude:41.72889,longitude:12.86945,aliases:['valle del pantano','artena kart']},
 
   // MOLISE
-  {id:'kartodromo-paradiso',name:'Kartodromo Paradiso',city:'Isernia',province:'IS',region:'Molise',country:'Italia',latitude:null,longitude:null,aliases:['paradiso kart','isernia kart']},
+  {id:'kartodromo-paradiso',name:'Kartodromo Paradiso',city:'Isernia',province:'IS',region:'Molise',country:'Italia',latitude:41.5341,longitude:14.3537,aliases:['paradiso kart','isernia kart']},
 
   // CAMPANIA
   {id:'motor-park-ottaviano',name:'Motor Park',city:'Ottaviano',province:'NA',region:'Campania',country:'Italia',latitude:null,longitude:null,aliases:['motor park ottaviano','ottaviano kart']},
