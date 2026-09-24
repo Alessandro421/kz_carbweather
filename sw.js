@@ -1,5 +1,5 @@
 const CACHE_PREFIX='kz-carbweather-';
-const CACHE='kz-carbweather-v2.3-appshell';
+const CACHE='kz-carbweather-v2.4-appshell';
 const ASSETS=[
   './',
   './index.html',
@@ -10,7 +10,7 @@ const ASSETS=[
 
 self.addEventListener('install',e=>{
   self.skipWaiting();
-  e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)));
+  e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS.map(asset=>new Request(asset,{cache:'reload'})))));
 });
 
 self.addEventListener('activate',e=>{
