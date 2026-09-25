@@ -57,7 +57,7 @@ const TRACK_DATABASE = [
 
   // CAMPANIA
   {id:'motor-park-ottaviano',name:'Motor Park',city:'Ottaviano',province:'NA',region:'Campania',country:'Italia',latitude:null,longitude:null,aliases:['motor park ottaviano','ottaviano kart']},
-  {id:'casaluce',name:'Casaluce',city:'Casaluce',province:'CE',region:'Campania',country:'Italia',latitude:null,longitude:null,aliases:['casaluce kart']},
+  {id:'casaluce',name:'Casaluce',city:'Casaluce',province:'CE',region:'Campania',country:'Italia',latitude:41.01358,longitude:14.19702,aliases:['casaluce kart']},
   {id:'sele',name:'Sele',city:'Battipaglia',province:'SA',region:'Campania',country:'Italia',latitude:null,longitude:null,aliases:['sele kart','battipaglia kart']},
   {id:'internazionale-di-napoli',name:'Internazionale di Napoli',city:'Sarno',province:'SA',region:'Campania',country:'Italia',latitude:40.839167,longitude:14.566389,aliases:['sarno','sarno kart','circuito internazionale napoli','kartodromo sarno']},
   {id:'pista-di-iscaro',name:'Pista di Iscaro',city:'Chianche',province:'AV',region:'Campania',country:'Italia',latitude:null,longitude:null,aliases:['iscaro kart','chianche kart']},
