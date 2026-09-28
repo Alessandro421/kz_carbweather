@@ -136,6 +136,13 @@ select{
 :where(button,a,summary,[tabindex]):focus:not(:focus-visible){
   outline:none;
 }
+/* Respect the OS-level reduced-motion preference across the app without changing normal visuals. */
 @media(prefers-reduced-motion:reduce){
-  .appToast{transition:none}
+  html:focus-within{scroll-behavior:auto}
+  *,*::before,*::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+    scroll-behavior:auto!important;
+  }
 }
